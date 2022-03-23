@@ -26,14 +26,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Src\glad\include\glad\glad.h">
       <Filter>ソース ファイル\glad</Filter>
     </ClInclude>
     <ClInclude Include="Src\glad\include\KHR\khrplatform.h">
       <Filter>ソース ファイル\glad</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
