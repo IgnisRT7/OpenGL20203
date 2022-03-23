@@ -36,7 +36,7 @@ namespace GLContext
 	*/
 	GLuint CreateVertexArray(GLuint vboPosition, GLuint vboColor)
 	{
-		if (!vboPosition || vboColor)
+		if (!vboPosition || !vboColor)
 		{
 			std::cerr << "[エラー]" << __func__ << ":バッファオブジェクトが0です。\n";
 			return 0;
@@ -77,7 +77,7 @@ namespace GLContext
 	{
 		GLuint program = glCreateShaderProgramv(type, 1, &code);
 
-		GLuint status = 0;
+		GLint status = 0;
 		glGetProgramiv(program, GL_LINK_STATUS, &status);
 		if (status == GL_FALSE)
 		{
@@ -125,10 +125,19 @@ namespace GLContext
 		glGetProgramPipelineiv(id, GL_VERTEX_SHADER, &testVp);
 		if (testVp != vp)
 		{
+			std::cerr << "[エラー]" << __func__ << ":頂点シェーダの設定に失敗.\n";
+			glDeleteProgramPipelines(1, &id);
+			return 0;
+		}
+		 GLint testFp = 0;
+		glGetProgramPipelineiv(id, GL_FRAGMENT_SHADER, &testFp);
+		if (testFp != fp)
+		{
 			std::cerr << "[エラー]" << __func__ << ":フラグメントシェーダの設定に失敗.\n";
 			glDeleteProgramPipelines(1, &id);
 			return 0;
 		}
+
 		return id;
 	}
 

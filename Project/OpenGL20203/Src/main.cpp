@@ -13,7 +13,7 @@ const Position positions[] =
 {
 	{ -0.33f, -0.5f, 0.5f },
 	{ 0.33f, -0.5f, 0.5f},
-	{ 0.0f, 0.5f, 0.5f}
+	{ 0.0f, 0.5f, 0.5f},
 };
 
 /// 色データ
@@ -25,7 +25,7 @@ const Color colors[] =
 };
 
 /// 頂点シェーダ
-static const char* vsCode =
+static const GLchar* vsCode =
 	"#version 450 \n"
 	"layout(location=0) in vec3 vPosition; \n"
 	"layout(location=1) in vec4 vColor; \n"
@@ -38,8 +38,8 @@ static const char* vsCode =
 	"} \n";
 
 /// フラグメントシェーダ
-static const char* fsCode =
-	"#vertion 450 \n"
+static const GLchar* fsCode =
+	"#version 450 \n"
 	"layout(location=0) in vec4 inColor; \n"
 	"out vec4 fragColor; \n"
 	"void main() { \n"
@@ -121,8 +121,9 @@ void GLAPIENTRY DebugCallback(GLenum source, GLenum type, GLuint id,
 	else
 	{
 		const std::string s(message, message +length);
-		std::cerr << "source=" + source << ": "
-			<< cmdStart << s << cmdEnd << "\n";
+//		std::cerr << "source=" << _source << ": "
+//			<< cmdStart << s << cmdEnd << "\n";
+		std::cerr << s << "\n";
 	}
 }
 
@@ -170,15 +171,40 @@ int main()
 		return 1;
 	}
 
+	//パイプラインオブジェクトを作成する
+	const GLuint vp = GLContext::CreateProgram(GL_VERTEX_SHADER, vsCode);
+	const GLuint fp = GLContext::CreateProgram(GL_FRAGMENT_SHADER, fsCode);
+	const GLuint pipeline = GLContext::Createpipeline(vp, fp);
+	if (!pipeline)
+	{
+		return 1;
+	}
+
 	//メインループ
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.1f, 0.3f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		glBindVertexArray(vao);
+		glBindProgramPipeline(pipeline);
+
+		glDrawArrays(GL_TRIANGLES, 0, sizeof(positions) / sizeof(positions[0]));
+
+		glBindProgramPipeline(0);
+		glBindVertexArray(0);
+
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
+
+	//後始末
+	glDeleteProgramPipelines(1, &pipeline);
+	glDeleteProgram(fp);
+	glDeleteProgram(vp);
+	glDeleteVertexArrays(1, &vao);
+	glDeleteBuffers(1, &vboColor);
+	glDeleteBuffers(1, &vboPosition);
 
 	//GLFWの終了
 	glfwTerminate();
