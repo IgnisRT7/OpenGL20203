@@ -3,6 +3,7 @@
 */
 #include "GLContext.h"
 #include <iostream>
+#include <vector>
 
 /**
 *	OpenGLコンテキストに関する機能を格納する名前空間
@@ -60,6 +61,74 @@ namespace GLContext
 		glVertexArrayAttribBinding(id, colorIndex, colorBindingIndex);
 		glVertexArrayVertexBuffer(id, colorBindingIndex, vboColor, 0, sizeof(Color));
 
+		return id;
+	}
+
+	/**
+	*	シェーダプログラムをビルドする
+	*
+	*	@param type	シェーダの種類
+	*	@param code	シェーダプログラムへのポインタ
+	*
+	*	@retval 0 >=	作成したプログラムオブジェクト
+	*	@retval 0		プログラムオブジェクトの作成失敗
+	*/
+	GLuint CreateProgram(GLenum type, const GLchar* code)
+	{
+		GLuint program = glCreateShaderProgramv(type, 1, &code);
+
+		GLuint status = 0;
+		glGetProgramiv(program, GL_LINK_STATUS, &status);
+		if (status == GL_FALSE)
+		{
+			GLint infoLen = 0;
+			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLen);
+			if (infoLen)
+			{
+				std::vector<char> buf;
+				buf.resize(infoLen);
+				if ((int)buf.size() >= infoLen)
+				{
+					glGetProgramInfoLog(program, infoLen, nullptr, buf.data());
+					std::cerr << "[エラー]" << __func__ << ":シェーダーのビルドに失敗.\n" << buf.data() << "\n";
+				}
+			}
+			glDeleteProgram(program);
+			return 0;
+		}
+		return program;
+	}
+
+	/**
+	*	パイプラインオブジェクトを作成する
+	*
+	*	@param vp	頂点シェーダプログラム
+	*	@param fp	フラグメントシェーダプログラム
+	*
+	*	@retval 0より大きい	作成したパイプラインオブジェクト
+	*	@retval 0			パイプラインオブジェクトの作成に失敗
+	*/
+	GLuint Createpipeline(GLuint vp, GLuint fp)
+	{
+		GLuint id;
+		glCreateProgramPipelines(1, &id);
+		glUseProgramStages(id, GL_VERTEX_SHADER_BIT, vp);
+		glUseProgramStages(id, GL_FRAGMENT_SHADER_BIT, fp);
+		if (glGetError() != GL_NO_ERROR)
+		{
+			std::cerr << "[エラー]" << __func__ <<":プログラムパイプラインの作成に失敗.\n";
+			glDeleteProgramPipelines(1, &id);
+			return 0;
+		}
+
+		GLint testVp = 0;
+		glGetProgramPipelineiv(id, GL_VERTEX_SHADER, &testVp);
+		if (testVp != vp)
+		{
+			std::cerr << "[エラー]" << __func__ << ":フラグメントシェーダの設定に失敗.\n";
+			glDeleteProgramPipelines(1, &id);
+			return 0;
+		}
 		return id;
 	}
 

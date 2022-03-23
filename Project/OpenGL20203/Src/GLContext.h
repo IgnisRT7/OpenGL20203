@@ -22,10 +22,10 @@ struct Color
 */
 namespace GLContext
 {
-
 	GLuint CreateBuffer(GLsizeiptr size, const GLvoid* data);
 	GLuint CreateVertexArray(GLuint vboPosition, GLuint vboColor);
-
+	GLuint CreateProgram(GLenum type, const GLchar* code);
+	GLuint Createpipeline(GLuint vp, GLuint fp);
 } // GLContext
 
 #endif// GLCONTEXT_H_INCLUDED

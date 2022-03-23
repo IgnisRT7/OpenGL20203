@@ -17,12 +17,34 @@ const Position positions[] =
 };
 
 /// 色データ
-const Color color[] =
+const Color colors[] =
 {
 	{ 0.0f, 0.0f, 1.0f, 1.0f }, // 青
 	{ 0.0f, 1.0f, 0.0f, 1.0f }, // 緑
 	{ 1.0f, 0.0f, 0.0f, 1.0f }, // 赤
 };
+
+/// 頂点シェーダ
+static const char* vsCode =
+	"#version 450 \n"
+	"layout(location=0) in vec3 vPosition; \n"
+	"layout(location=1) in vec4 vColor; \n"
+	"layout(location=0) out vec4 outColor; \n"
+	"out gl_PerVertex { \n"
+	"	vec4 gl_Position; \n"
+	"}; \n"
+	"void main() { \n"
+	"	gl_Position = vec4(vPosition, 1.0); \n"
+	"} \n";
+
+/// フラグメントシェーダ
+static const char* fsCode =
+	"#vertion 450 \n"
+	"layout(location=0) in vec4 inColor; \n"
+	"out vec4 fragColor; \n"
+	"void main() { \n"
+	"	fragColor = inColor; \n"
+	"} \n";
 
 /**
 *	OpenGLからのメッセージを処理する
@@ -139,6 +161,15 @@ int main()
 
 	glDebugMessageCallback(DebugCallback, nullptr);
 	
+	// VAOを作成する
+	const GLuint vboPosition = GLContext::CreateBuffer(sizeof(positions), positions);
+	const GLuint vboColor = GLContext::CreateBuffer(sizeof(colors), colors);
+	const GLuint vao = GLContext::CreateVertexArray(vboPosition, vboColor);
+	if (!vao)
+	{
+		return 1;
+	}
+
 	//メインループ
 	while (!glfwWindowShouldClose(window))
 	{
