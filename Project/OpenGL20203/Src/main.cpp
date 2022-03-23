@@ -2,10 +2,27 @@
 *	@file Main.cpp
 */
 #include <glad/glad.h>
+#include "GLContext.h"
 #include <GLFW/glfw3.h>
 #include <string>
 #include <iostream>
 #pragma comment(lib,"opengl32.lib")
+
+/// 座標データ
+const Position positions[] = 
+{
+	{ -0.33f, -0.5f, 0.5f },
+	{ 0.33f, -0.5f, 0.5f},
+	{ 0.0f, 0.5f, 0.5f}
+};
+
+/// 色データ
+const Color color[] =
+{
+	{ 0.0f, 0.0f, 1.0f, 1.0f }, // 青
+	{ 0.0f, 1.0f, 0.0f, 1.0f }, // 緑
+	{ 1.0f, 0.0f, 0.0f, 1.0f }, // 赤
+};
 
 /**
 *	OpenGLからのメッセージを処理する
