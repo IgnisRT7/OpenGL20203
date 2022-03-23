@@ -44,8 +44,7 @@ namespace GLContext
 
 		GLuint id = 0;
 		glCreateVertexArrays(1, &id);
-
-		// 座標情報のバインド
+		
 		const GLuint positionIndex = 0;
 		const GLuint positionBindingIndex = 0;
 		glEnableVertexArrayAttrib(id, positionIndex);
@@ -53,7 +52,6 @@ namespace GLContext
 		glVertexArrayAttribBinding(id, positionIndex, positionBindingIndex);
 		glVertexArrayVertexBuffer(id, positionBindingIndex, vboPosition, 0, sizeof(Position));
 
-		// 色情報のバインド
 		const GLuint colorIndex = 1;
 		const GLuint colorBindingIndex = 1;
 		glEnableVertexArrayAttrib(id, colorIndex);
@@ -90,7 +88,8 @@ namespace GLContext
 				if ((int)buf.size() >= infoLen)
 				{
 					glGetProgramInfoLog(program, infoLen, nullptr, buf.data());
-					std::cerr << "[エラー]" << __func__ << ":シェーダーのビルドに失敗.\n" << buf.data() << "\n";
+					std::cerr << "[エラー]" << __func__ <<
+						":シェーダーのビルドに失敗.\n" << buf.data() << "\n";
 				}
 			}
 			glDeleteProgram(program);
