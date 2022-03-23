@@ -121,7 +121,7 @@ int main()
 	}
 
 	glDebugMessageCallback(DebugCallback, nullptr);
-	glDrawElements(GL_LINES, 0, 0, nullptr);
+	
 	//ƒƒCƒ“ƒ‹[ƒv
 	while (!glfwWindowShouldClose(window))
 	{
