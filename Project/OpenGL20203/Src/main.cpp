@@ -243,9 +243,19 @@ int main()
 		matR[1][0] = s;
 		matR[1][1] = c;
 
+		//プロジェクション行列を作成
+		int w, h;
+		glfwGetWindowSize(window, &w, &h);
+		const float aspectRatio =static_cast<float>(w) / static_cast<float>(h);
+		const glm::mat4 matProj = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 200.0f);
+
+		//ビュー行列を作成
+		const glm::mat4 matView = glm::lookAt(glm::vec3(0, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+
 		//行列をシェーダに転送する
-		glm::mat4 matTRS = matT * matS * matR;
-		glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matTRS[0][0]);
+		const glm::mat4 matModel = matT * matS * matR;
+		const glm::mat4 matMVP = matProj * matView * matModel;
+		glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matMVP[0][0]);
 
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_SHORT, 0);
 
