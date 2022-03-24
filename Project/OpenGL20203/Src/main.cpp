@@ -116,7 +116,7 @@ const int imageGroundHeight = 8; // 画面の高さ
 const GLuint X = 0xff'18'18'18; // 黒
 const GLuint W = 0xff'ff'ff'ff; // 白
 const GLuint R = 0xff'10'10'e0; // 赤
-const GLuint B = 0xff'e0'10,10; // 青
+const GLuint B = 0xff'e0'10'10; // 青
 const GLuint imageGround[imageGroundWidth * imageGroundHeight] =
 {
 	X, B, B, B, X, W, W, W,
@@ -149,8 +149,9 @@ static const GLchar * fsCode =
 	"#version 450 \n"
 	"layout(location=0) in vec4 inColor; \n"
 	"out vec4 fragColor; \n"
+	"layout(binding=0) uniform sampler2D texColor; \n"
 	"void main() { \n"
-	"  fragColor = inColor; \n"
+	"  fragColor = texture(texColor, gl_FragCoord.xy * 0.01); \n"
 	"} \n";
 
 /**
@@ -339,10 +340,15 @@ int main()
 		const glm::mat4 matMVP = matProj * matView * matModel;
 		glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matMVP[0][0]);
 
-		//glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_SHORT, 0);
+		glBindTextureUnit(0, texGround); // テクスチャを割り当てる
+
 		primGround.Draw();
 		primTriangles.Draw();
 		primCube.Draw();
+
+		// テクスチャの割り当てを解除
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 		glBindProgramPipeline(0);
 		glBindVertexArray(0);
