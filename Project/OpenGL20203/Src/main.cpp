@@ -3,6 +3,7 @@
 */
 #include <glad/glad.h>
 #include "GLContext.h"
+#include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 #include <string>
 #include <iostream>
@@ -64,21 +65,10 @@ static const GLchar* vsCode =
 	"out gl_PerVertex { \n"
 	"  vec4 gl_Position; \n"
 	"}; \n"
+	"layout(location=0) uniform mat4 matTRS; \n"
 	"void main() { \n"
 	"  outColor = vColor; \n"
-	"  float s = sin(radians(57.3)); \n"
-	"  float c = cos(radians(57.3)); \n"
-	"  mat4 matT = mat4(1); \n"
-	"  matT[3] = vec4(-0.3,-0.5, 0.0, 1.0); \n"
-	"  mat4 matS = mat4(1); \n"
-	"  matS[0][0] = 0.5; \n"
-	"  matS[1][1] = 1.5; \n"
-	"  mat4 matR = mat4(1); \n"
-	"  matR[0][0] = c; \n"
-	"  matR[0][1] = -s; \n"
-	"  matR[1][0] = s; \n"
-	"  matR[1][1] = c; \n"
-	"  gl_Position = matT * matS * matR * vec4(vPosition, 1.0); \n"
+	"  gl_Position = matTRS * vec4(vPosition, 1.0); \n"
 	"} \n";
 
 /// フラグメントシェーダー.
@@ -225,6 +215,12 @@ int main()
 		return 1;
 	}
 
+	// uniform変数の位置
+	const GLint locMatTRS = 0;
+
+	//座標返還行列の回転角度
+	float degree = 0;
+
 	//メインループ
 	while (!glfwWindowShouldClose(window))
 	{
@@ -233,8 +229,24 @@ int main()
 
 		glBindVertexArray(vao);
 		glBindProgramPipeline(pipeline);
+		float s = sin(glm::radians(degree));
+		float c = cos(glm::radians(degree));
+		degree += 0.01f;
+		glm::mat4 matT = glm::mat4(1);
+		matT[3] = glm::vec4(-0.3,-0.5, 0.0, 1.0);
+		glm::mat4 matS = glm::mat4(1);
+		matS[0][0] = 0.5;
+		matS[1][1] = 1.5;
+		glm::mat4 matR = glm::mat4(1);
+		matR[0][0] = c;
+		matR[0][1] = -s;
+		matR[1][0] = s;
+		matR[1][1] = c;
 
-		//glDrawArrays(GL_TRIANGLES, 0, sizeof(positions) / sizeof(positions[0]));
+		//行列をシェーダに転送する
+		glm::mat4 matTRS = matT * matS * matR;
+		glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matTRS[0][0]);
+
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_SHORT, 0);
 
 		glBindProgramPipeline(0);
