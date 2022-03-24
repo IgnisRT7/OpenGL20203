@@ -11,6 +11,18 @@
 /// 座標データ
 const Position positions[] = 
 {
+	{-0.3f, -0.3f, 0.4f},
+	{ 0.2f, -0.3f, 0.4f},
+	{ 0.2f,  0.5f, 0.4f},
+	{-0.3f,  0.5f, 0.4f},
+
+	{-0.2f, -0.5f, 0.1f},
+	{ 0.3f, -0.5f, 0.1f},
+	{ 0.3f,  0.3f, 0.1f},
+	{ 0.3f,  0.3f, 0.1f},
+	{-0.2f,  0.3f, 0.1f},
+	{-0.2f, -0.5f, 0.1f},
+
 	{-0.33f, -0.5f, 0.5f },
 	{ 0.33f, -0.5f, 0.5f },
 	{ 0.0f,  0.5f, 0.5f },
@@ -19,9 +31,28 @@ const Position positions[] =
 /// 色データ
 const Color colors[] =
 {
-	{ 0.0f, 0.0f, 1.0f, 1.0f }, // 青
-	{ 0.0f, 1.0f, 0.0f, 1.0f }, // 緑
-	{ 1.0f, 0.0f, 0.0f, 1.0f }, // 赤
+	{0.0f, 1.0f, 0.0f, 1.0f},
+	{0.0f, 0.0f, 1.0f, 1.0f},
+	{1.0f, 0.0f, 0.0f, 1.0f},
+	{0.0f, 0.0f, 1.0f, 1.0f},
+
+	{1.0f, 0.0f, 0.0f, 1.0f},
+	{1.0f, 1.0f, 0.0f, 1.0f},
+	{1.0f, 0.0f, 0.0f, 1.0f},
+	{0.0f, 0.0f, 1.0f, 1.0f},
+	{0.0f, 1.0f, 1.0f, 1.0f},
+	{0.0f, 0.0f, 1.0f, 1.0f},
+
+	{ 0.0f, 1.0f, 1.0f, 1.0f }, // 水色
+	{ 1.0f, 1.0f, 0.0f, 1.0f }, // 黄色
+	{ 1.0f, 0.0f, 1.0f, 1.0f }, // 紫色
+};
+
+// インデックスデータ
+const GLushort indices[] =
+{
+	0, 1, 2, 2, 3, 0,
+	4, 5, 6, 7, 8, 9,
 };
 
 /// 頂点シェーダー.
@@ -35,7 +66,19 @@ static const GLchar* vsCode =
 	"}; \n"
 	"void main() { \n"
 	"  outColor = vColor; \n"
-	"  gl_Position = vec4(vPosition, 1.0); \n"
+	"  float s = sin(radians(57.3)); \n"
+	"  float c = cos(radians(57.3)); \n"
+	"  mat4 matT = mat4(1); \n"
+	"  matT[3] = vec4(-0.3,-0.5, 0.0, 1.0); \n"
+	"  mat4 matS = mat4(1); \n"
+	"  matS[0][0] = 0.5; \n"
+	"  matS[1][1] = 1.5; \n"
+	"  mat4 matR = mat4(1); \n"
+	"  matR[0][0] = c; \n"
+	"  matR[0][1] = -s; \n"
+	"  matR[1][0] = s; \n"
+	"  matR[1][1] = c; \n"
+	"  gl_Position = matT * matS * matR * vec4(vPosition, 1.0); \n"
 	"} \n";
 
 /// フラグメントシェーダー.
@@ -166,7 +209,8 @@ int main()
 	// VAOを作成する.
 	const GLuint vboPosition = GLContext::CreateBuffer(sizeof(positions), positions);
 	const GLuint vboColor = GLContext::CreateBuffer(sizeof(colors), colors);
-	const GLuint vao = GLContext::CreateVertexArray(vboPosition, vboColor);
+	const GLuint ibo = GLContext::CreateBuffer(sizeof(indices), indices);
+	const GLuint vao = GLContext::CreateVertexArray(vboPosition, vboColor, ibo);
 	if (!vao)
 	{
 		return 1;
@@ -190,8 +234,9 @@ int main()
 		glBindVertexArray(vao);
 		glBindProgramPipeline(pipeline);
 
-		glDrawArrays(GL_TRIANGLES, 0, sizeof(positions) / sizeof(positions[0]));
-	
+		//glDrawArrays(GL_TRIANGLES, 0, sizeof(positions) / sizeof(positions[0]));
+		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_SHORT, 0);
+
 		glBindProgramPipeline(0);
 		glBindVertexArray(0);
 
@@ -204,6 +249,7 @@ int main()
 	glDeleteProgram(fp);
 	glDeleteProgram(vp);
 	glDeleteVertexArrays(1, &vao);
+	glDeleteBuffers(1, &ibo);
 	glDeleteBuffers(1, &vboColor);
 	glDeleteBuffers(1, &vboPosition);
 
