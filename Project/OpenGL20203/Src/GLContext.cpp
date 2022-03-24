@@ -142,4 +142,36 @@ namespace GLContext
 		return id;
 	}
 
+	/**
+	*	2Dテクスチャを作成する
+	*
+	*	@param width	画像の幅(ピクセル数)
+	*	@param height	画像の高さ(ピクセル数)
+	*	@param data		画像データのアドレス
+	*
+	*	@retval 0以外	作成したテクスチャオブジェクトのID
+	*	@retval 0		テクスチャの作成失敗
+	*/
+	GLuint CreateImage2D(GLsizei width, GLsizei height, const void* data)
+	{
+		glGetError(); // エラー状態をリセット
+
+		// テクスチャオブジェクトを作成し、GPUメモリを確保する
+		GLuint id;
+		glCreateTextures(GL_TEXTURE_2D, 1, &id);
+		glTextureStorage2D(id, 1, GL_RGBA8, width, height);
+
+		// GPUメモリにデータを転送する
+		glTextureSubImage2D(id, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		const GLenum result = glGetError();
+		if (result != GL_NO_ERROR)
+		{
+			std::cerr<< "[エラー]" << __func__ << "テクスチャの作成に失敗\n";
+			glDeleteTextures(1, &id);
+			return 0;
+		}
+
+		return id;
+	}
+
 } // namespace GLContext

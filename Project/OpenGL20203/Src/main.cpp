@@ -110,6 +110,25 @@ const Primitive primGround(GL_TRIANGLES, 6, 0 * sizeof(GLushort), 0); //四角形
 const Primitive primTriangles(GL_TRIANGLES, 9, 12 * sizeof(GLushort), 0); //三角形
 const Primitive primCube(GL_TRIANGLES, 36, 21 * sizeof(GLushort), 0); //立方体
 
+//画像データ
+const int imageGroundWidth = 8; // 画面の幅
+const int imageGroundHeight = 8; // 画面の高さ
+const GLuint X = 0xff'18'18'18; // 黒
+const GLuint W = 0xff'ff'ff'ff; // 白
+const GLuint R = 0xff'10'10'e0; // 赤
+const GLuint B = 0xff'e0'10,10; // 青
+const GLuint imageGround[imageGroundWidth * imageGroundHeight] =
+{
+	X, B, B, B, X, W, W, W,
+	X, B, B, B, X, W, W, W,
+	X, B, B, B, X, W, W, W,
+	X, X, X, X, X, X, X, X,
+	W, W, X, R, R, R, X, W,
+	W, W, X, R, R, R, X, W,
+	W, W, X, R, R, R, X, W,
+	X, X, X, X, X, X, X, X,
+};
+
 /// 頂点シェーダー.
 static const GLchar* vsCode =
 	"#version 450 \n"
@@ -275,6 +294,13 @@ int main()
 	//座標返還行列の回転角度
 	float degree = 0;
 
+	//テクスチャ作成
+	const GLuint texGround = GLContext::CreateImage2D(imageGroundWidth, imageGroundHeight, imageGround);
+	if (!texGround)
+	{
+		return 1;
+	}
+
 	//メインループ
 	while (!glfwWindowShouldClose(window))
 	{
@@ -326,6 +352,7 @@ int main()
 	}
 
 	//後始末
+	glDeleteTextures(1, &texGround);
 	glDeleteProgramPipelines(1, &pipeline);
 	glDeleteProgram(fp);
 	glDeleteProgram(vp);
