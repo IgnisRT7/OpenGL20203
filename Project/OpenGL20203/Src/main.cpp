@@ -27,15 +27,15 @@ const Position positions[] =
 	{-0.2f, -0.5f, 0.1f},
 	
 	//三角形x3
-	{-0.33f, 2.0f, 0.5f },
-	{ 0.33f, 2.0f, 0.5f },
-	{ 0.0f,  1.0f, 0.5f },
-	{ 0.33f, 2.0f, 0.5f },
-	{ 0.99f, 2.0f, 0.5f },
-	{ 0.66f, 1.0f, 0.5f },
-	{ 0.0f,  1.0f, 0.5f },
-	{ 0.66f, 1.0f, 0.5f },
-	{ 0.33f, 0.0f, 0.5f },
+	{-0.33f * 5, 2.0f * 5, 0.5f },
+	{ 0.33f * 5, 2.0f * 5, 0.5f },
+	{ 0.0f * 5,  1.0f * 5, 0.5f },
+	{ 0.33f * 5, 2.0f * 5, 0.5f },
+	{ 0.99f * 5, 2.0f * 5, 0.5f },
+	{ 0.66f * 5, 1.0f * 5, 0.5f },
+	{ 0.0f * 5,  1.0f * 5, 0.5f },
+	{ 0.66f * 5, 1.0f * 5, 0.5f },
+	{ 0.33f * 5, 0.0f * 5, 0.5f },
 
 	//立方体
 	{ 0.0f, 0.0f, 2.0f },
@@ -113,6 +113,8 @@ const Primitive primCube(GL_TRIANGLES, 36, 21 * sizeof(GLushort), 0); //立方体
 //画像データ
 const int imageGroundWidth = 8; // 画面の幅
 const int imageGroundHeight = 8; // 画面の高さ
+const int imageTriangleWidth = 6;
+const int imageTriangleHeight = 6;
 const GLuint X = 0xff'18'18'18; // 黒
 const GLuint W = 0xff'ff'ff'ff; // 白
 const GLuint R = 0xff'10'10'e0; // 赤
@@ -127,6 +129,15 @@ const GLuint imageGround[imageGroundWidth * imageGroundHeight] =
 	W, W, X, R, R, R, X, W,
 	W, W, X, R, R, R, X, W,
 	X, X, X, X, X, X, X, X,
+};
+const GLuint imageTriangle[imageTriangleWidth * imageTriangleHeight] = 
+{
+	W, B, W, B, W, B,
+	B, W, B, W, B, W,
+	W, B, W, B, W, B,
+	B, W, B, W, B, W,
+	W, B, W, B, W, B,
+	B, W, B, W, B, W,
 };
 
 /// 頂点シェーダー.
@@ -297,7 +308,8 @@ int main()
 
 	//テクスチャ作成
 	const GLuint texGround = GLContext::CreateImage2D(imageGroundWidth, imageGroundHeight, imageGround);
-	if (!texGround)
+	const GLuint texTriangle = GLContext::CreateImage2D(imageTriangleWidth, imageTriangleHeight, imageTriangle);
+	if (!texGround || !texTriangle)
 	{
 		return 1;
 	}
@@ -344,7 +356,7 @@ int main()
 
 		primGround.Draw();
 		primTriangles.Draw();
-		primCube.Draw();
+		//primCube.Draw();
 
 		// テクスチャの割り当てを解除
 		glActiveTexture(GL_TEXTURE0);
@@ -359,6 +371,7 @@ int main()
 
 	//後始末
 	glDeleteTextures(1, &texGround);
+	glDeleteTextures(1, &texTriangle);
 	glDeleteProgramPipelines(1, &pipeline);
 	glDeleteProgram(fp);
 	glDeleteProgram(vp);
