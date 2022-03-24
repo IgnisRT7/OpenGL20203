@@ -3,6 +3,7 @@
 */
 #include <glad/glad.h>
 #include "GLContext.h"
+#include "Primitive.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 #include <string>
@@ -12,10 +13,11 @@
 /// 座標データ
 const Position positions[] = 
 {
-	{-0.3f, -0.3f, 0.4f},
-	{ 0.2f, -0.3f, 0.4f},
-	{ 0.2f,  0.5f, 0.4f},
-	{-0.3f,  0.5f, 0.4f},
+	// 地面
+	{-20.0f, 0.0f, 20.0f},
+	{ 20.0f, 0.0f, 20.0f},
+	{ 20.0f, 0.0f,-20.0f},
+	{-20.0f, 0.0f,-20.0f},
 
 	{-0.2f, -0.5f, 0.1f},
 	{ 0.3f, -0.5f, 0.1f},
@@ -23,20 +25,39 @@ const Position positions[] =
 	{ 0.3f,  0.3f, 0.1f},
 	{-0.2f,  0.3f, 0.1f},
 	{-0.2f, -0.5f, 0.1f},
+	
+	//三角形x3
+	{-0.33f, 2.0f, 0.5f },
+	{ 0.33f, 2.0f, 0.5f },
+	{ 0.0f,  1.0f, 0.5f },
+	{ 0.33f, 2.0f, 0.5f },
+	{ 0.99f, 2.0f, 0.5f },
+	{ 0.66f, 1.0f, 0.5f },
+	{ 0.0f,  1.0f, 0.5f },
+	{ 0.66f, 1.0f, 0.5f },
+	{ 0.33f, 0.0f, 0.5f },
 
-	{-0.33f, -0.5f, 0.5f },
-	{ 0.33f, -0.5f, 0.5f },
-	{ 0.0f,  0.5f, 0.5f },
+	//立方体
+	{ 0.0f, 0.0f, 2.0f },
+	{ 2.0f, 0.0f, 2.0f },
+	{ 2.0f, 2.0f, 2.0f },
+	{ 0.0f, 2.0f, 2.0f },
+	{ 0.0f, 0.0f, 0.0f },
+	{ 2.0f, 0.0f, 0.0f },
+	{ 2.0f, 2.0f, 0.0f },
+	{ 0.0f, 2.0f, 0.0f },
 };
 
 /// 色データ
 const Color colors[] =
 {
+	//地面 0 - 3
 	{0.0f, 1.0f, 0.0f, 1.0f},
 	{0.0f, 0.0f, 1.0f, 1.0f},
 	{1.0f, 0.0f, 0.0f, 1.0f},
 	{0.0f, 0.0f, 1.0f, 1.0f},
 
+	//非共有面 4 - 9
 	{1.0f, 0.0f, 0.0f, 1.0f},
 	{1.0f, 1.0f, 0.0f, 1.0f},
 	{1.0f, 0.0f, 0.0f, 1.0f},
@@ -44,17 +65,50 @@ const Color colors[] =
 	{0.0f, 1.0f, 1.0f, 1.0f},
 	{0.0f, 0.0f, 1.0f, 1.0f},
 
+	//三角形x3 10 - 18
 	{ 0.0f, 1.0f, 1.0f, 1.0f }, // 水色
 	{ 1.0f, 1.0f, 0.0f, 1.0f }, // 黄色
 	{ 1.0f, 0.0f, 1.0f, 1.0f }, // 紫色
+	{ 0.0f, 1.0f, 1.0f, 1.0f }, // 水色
+	{ 1.0f, 1.0f, 0.0f, 1.0f }, // 黄色
+	{ 1.0f, 0.0f, 1.0f, 1.0f }, // 紫色
+	{ 0.0f, 1.0f, 1.0f, 1.0f }, // 水色
+	{ 1.0f, 1.0f, 0.0f, 1.0f }, // 黄色
+	{ 1.0f, 0.0f, 1.0f, 1.0f }, // 紫色
+
+	//立方体 19 - 26
+	{1.0f, 1.0f, 1.0f, 1.0f},
+	{1.0f, 1.0f, 1.0f, 1.0f},
+	{1.0f, 1.0f, 1.0f, 1.0f}, 
+	{1.0f, 1.0f, 1.0f, 1.0f}, 
+	{1.0f, 1.0f, 1.0f, 1.0f},
+	{1.0f, 1.0f, 1.0f, 1.0f},
+	{1.0f, 1.0f, 1.0f, 1.0f},
+	{1.0f, 1.0f, 1.0f, 1.0f},
 };
 
 // インデックスデータ
 const GLushort indices[] =
 {
+	//地面
 	0, 1, 2, 2, 3, 0,
+	//四角ポリゴン
 	4, 5, 6, 7, 8, 9,
+	//三角形x3
+	12, 11, 10, 15, 14, 13, 18, 17, 16,
+	//立方体
+	19, 20, 21, 19, 21, 22, // 手前
+	20, 24, 25, 20, 25, 21, // 右
+	22, 21, 25, 22, 25, 26, // 上
+	19, 23, 26, 19, 26, 22, // 左
+	19, 20, 24, 19, 24, 23, // 下
+	23, 24, 25, 23, 25, 26, // 奥
 };
+
+//描画データ
+const Primitive primGround(GL_TRIANGLES, 6, 0 * sizeof(GLushort), 0); //四角形
+const Primitive primTriangles(GL_TRIANGLES, 9, 12 * sizeof(GLushort), 0); //三角形
+const Primitive primCube(GL_TRIANGLES, 36, 21 * sizeof(GLushort), 0); //立方体
 
 /// 頂点シェーダー.
 static const GLchar* vsCode =
@@ -224,6 +278,8 @@ int main()
 	//メインループ
 	while (!glfwWindowShouldClose(window))
 	{
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
 		glClearColor(0.1f, 0.3f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -250,14 +306,17 @@ int main()
 		const glm::mat4 matProj = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 200.0f);
 
 		//ビュー行列を作成
-		const glm::mat4 matView = glm::lookAt(glm::vec3(0, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+		const glm::mat4 matView = glm::lookAt(glm::vec3(0, 20, 20), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
 		//行列をシェーダに転送する
-		const glm::mat4 matModel = matT * matS * matR;
+		const glm::mat4 matModel = glm::mat4(1);
 		const glm::mat4 matMVP = matProj * matView * matModel;
 		glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matMVP[0][0]);
 
-		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_SHORT, 0);
+		//glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_SHORT, 0);
+		primGround.Draw();
+		primTriangles.Draw();
+		primCube.Draw();
 
 		glBindProgramPipeline(0);
 		glBindVertexArray(0);
