@@ -14,10 +14,10 @@
 const Position positions[] = 
 {
 	// 地面
-	{-20.0f, -10.0f, 20.0f},
-	{ 20.0f, -10.0f, 20.0f},
-	{ 20.0f, -10.0f,-20.0f},
-	{-20.0f, -10.0f,-20.0f},
+	{-2.0f, 0.0f, 2.0f},
+	{ 2.0f, 0.0f, 2.0f},
+	{ 2.0f, 0.0f,-2.0f},
+	{-2.0f, 0.0f,-2.0f},
 
 	{-0.2f, -0.5f, 0.1f},
 	{ 0.3f, -0.5f, 0.1f},
@@ -140,14 +140,15 @@ const Primitive primTriangles(GL_TRIANGLES, 9, 12 * sizeof(GLushort), 0); //三角
 const Primitive primCube(GL_TRIANGLES, 36, 21 * sizeof(GLushort), 0); //立方体
 
 //画像データ
-const int imageGroundWidth = 8; // 画面の幅
-const int imageGroundHeight = 8; // 画面の高さ
-const int imageTriangleWidth = 6;
-const int imageTriangleHeight = 6;
 const GLuint X = 0xff'18'18'18; // 黒
 const GLuint W = 0xff'ff'ff'ff; // 白
 const GLuint R = 0xff'10'10'e0; // 赤
 const GLuint B = 0xff'e0'10'10; // 青
+const GLuint G = 0xff'22'B1'4C; // 緑
+
+//地面用画像
+const int imageGroundWidth = 8; // 画面の幅
+const int imageGroundHeight = 8; // 画面の高さ
 const GLuint imageGround[imageGroundWidth * imageGroundHeight] =
 {
 	X, B, B, B, X, W, W, W,
@@ -159,6 +160,9 @@ const GLuint imageGround[imageGroundWidth * imageGroundHeight] =
 	W, W, X, R, R, R, X, W,
 	X, X, X, X, X, X, X, X,
 };
+//三角形用画像
+const int imageTriangleWidth = 6;
+const int imageTriangleHeight = 6;
 const GLuint imageTriangle[imageTriangleWidth * imageTriangleHeight] = 
 {
 	W, X, W, X, W, X,
@@ -167,6 +171,34 @@ const GLuint imageTriangle[imageTriangleWidth * imageTriangleHeight] =
 	W, X, W, X, W, X,
 	W, X, W, X, W, X,
 	W, X, W, X, W, X,
+};
+//緑地用画像
+const int imageGreenWidth = 8;
+const int imageGreenHeight = 8;
+const GLuint imageGreen[imageGreenWidth * imageGreenHeight] =
+{
+	G, G, G, G, G, G, G, G,
+	G, G, G, G, G, G, G, G,
+	G, G, G, G, G, G, G, G, 
+	G, G, G, G, G, G, G, G, 
+	G, G, G, G, G, G, G, G,
+	G, G, G, G, G, G, G, G,
+	G, G, G, G, G, G, G, G,
+	G, G, G, G, G, G, G, G,
+};
+//道用画像
+const int imageRoadWidth = 8;
+const int imageRoadHeight = 8;
+const GLuint imageRoad[imageRoadWidth * imageRoadHeight] =
+{
+	W, W, W, W, W, W, W, W,
+	X, X, X, X, X, X, X, X,
+	X, X, X, X, X, X, X, X,
+	X, W, W, W, W, X, X, X,
+	X, W, W, W, W, X, X, X,
+	X, X, X, X, X, X, X, X,
+	X, X, X, X, X, X, X, X,
+	W, W, W, W, W, W, W, W,
 };
 
 /// 頂点シェーダー.
@@ -198,6 +230,21 @@ static const GLchar * fsCode =
 	"  vec4 tc = texture(texColor, inTexcoord); \n"
 	"  fragColor = inColor * tc; \n"
 	"} \n";
+
+/// マップデータ
+int mapData[10][10] =
+{
+	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
+	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
+	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
+	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
+	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
+	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
+	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
+	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
+	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
+	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0}, 
+};
 
 /**
 *	OpenGLからのメッセージを処理する
@@ -344,7 +391,9 @@ int main()
 	//テクスチャ作成
 	const GLuint texGround = GLContext::CreateImage2D(imageGroundWidth, imageGroundHeight, imageGround);
 	const GLuint texTriangle = GLContext::CreateImage2D(imageTriangleWidth, imageTriangleHeight, imageTriangle);
-	if (!texGround || !texTriangle)
+	const GLuint texGreen = GLContext::CreateImage2D(imageGreenWidth, imageGreenHeight, imageGreen);
+	const GLuint texRoad = GLContext::CreateImage2D(imageRoadWidth, imageRoadHeight, imageRoad);
+	if (!texGround || !texTriangle || !texGreen || !texRoad)
 	{
 		return 1;
 	}
@@ -395,12 +444,33 @@ int main()
 		const glm::mat4 matMVP = matProj * matView * matModel;
 		glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matMVP[0][0]);
 
-		glBindTextureUnit(0, texGround); // テクスチャを割り当てる
-		primGround.Draw();
+		//glBindTextureUnit(0, texGround); // テクスチャを割り当てる
+		//primGround.Draw();
 
+		//立方体の描画
 		glBindTextureUnit(0, texTriangle);
 		primTriangles.Draw();
 		primCube.Draw();
+
+		//マップを(-20-20)-(20,20)の範囲に描画
+		const GLuint mapTexList[] = {texGreen, texGround, texRoad };
+		for (int y = 0; y < 10; ++y)
+		{
+			for (int x = 0; x < 10; ++x)
+			{
+				//四角形が4x4mなので、xとyを4倍した位置に表示する
+				const glm::vec3 position(x *4 - 20, 0, y * 4 - 20);
+
+				//行列をシェーダに転送する
+				const glm::mat4 matModel = glm::translate(glm::mat4(1), position);
+				const glm::mat4 matMVP = matProj * matView * matModel;
+				glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matMVP[0][0]);
+
+				const int textureNo = mapData[y][x];
+				glBindTextureUnit(0, mapTexList[textureNo]);
+				primGround.Draw();
+			}
+		}
 
 		// テクスチャの割り当てを解除
 		glActiveTexture(GL_TEXTURE0);
