@@ -52,12 +52,12 @@ const Position positions[] =
 const Color colors[] =
 {
 	//地面 0 - 3
-	{0.0f, 1.0f, 0.0f, 1.0f},
-	{0.0f, 0.0f, 1.0f, 1.0f},
-	{1.0f, 0.0f, 0.0f, 1.0f},
-	{0.0f, 0.0f, 1.0f, 1.0f},
+	{1.0f, 1.0f, 1.0f, 1.0f},
+	{1.0f, 1.0f, 1.0f, 1.0f},
+	{1.0f, 1.0f, 1.0f, 1.0f},
+	{1.0f, 1.0f, 1.0f, 1.0f},
 
-	//非共有面 4 - 9
+	//四角形 4 - 9
 	{1.0f, 0.0f, 0.0f, 1.0f},
 	{1.0f, 1.0f, 0.0f, 1.0f},
 	{1.0f, 0.0f, 0.0f, 1.0f},
@@ -90,11 +90,31 @@ const Color colors[] =
 /// テクスチャ座標データ
 const glm::vec2 texcoords[] =
 {
+	//地面
+	{-4.0f,-4.0f },
+	{ 4.0f,-4.0f },
+	{ 4.0f, 4.0f },
+	{-4.0f, 4.0f },
+
+	//四角形
 	{ 0.0f, 0.0f },
-	{ 1.0f, 0.0f },
-	{ 1.0f, 1.0f },
-	{ 0.0f, 1.0f },
-}
+	{ 0.0f, 0.0f },
+	{ 0.0f, 0.0f },
+	{ 0.0f, 0.0f },
+	{ 0.0f, 0.0f },
+	{ 0.0f, 0.0f },
+
+	//三角形x3
+	{ 0.0, 0.1 },
+	{ 1.0, 0.1 },
+	{ 0.5, 0.9 },
+	{ 0.0, 0.1 },
+	{ 1.0, 0.1 },
+	{ 0.5, 0.9 },
+	{ 0.0, 0.1 },
+	{ 1.0, 0.1 },
+	{ 0.5, 0.9 },
+};
 
 // インデックスデータ
 const GLushort indices[] =
@@ -154,13 +174,16 @@ static const GLchar* vsCode =
 	"#version 450 \n"
 	"layout(location=0) in vec3 vPosition; \n"
 	"layout(location=1) in vec4 vColor; \n"
+	"layout(location=2) in vec2 vTexcoord; \n"
 	"layout(location=0) out vec4 outColor; \n"
+	"layout(location=1) out vec2 outTexcoord; \n"
 	"out gl_PerVertex { \n"
 	"  vec4 gl_Position; \n"
 	"}; \n"
 	"layout(location=0) uniform mat4 matTRS; \n"
 	"void main() { \n"
 	"  outColor = vColor; \n"
+	"  outTexcoord = vTexcoord; \n"
 	"  gl_Position = matTRS * vec4(vPosition, 1.0); \n"
 	"} \n";
 
@@ -168,10 +191,12 @@ static const GLchar* vsCode =
 static const GLchar * fsCode =
 	"#version 450 \n"
 	"layout(location=0) in vec4 inColor; \n"
+	"layout(location=1) in vec2 inTexcoord; \n"
 	"out vec4 fragColor; \n"
 	"layout(binding=0) uniform sampler2D texColor; \n"
 	"void main() { \n"
-	"  fragColor = texture(texColor, gl_FragCoord.xy * 0.01); \n"
+	"  vec4 tc = texture(texColor, inTexcoord); \n"
+	"  fragColor = inColor * tc; \n"
 	"} \n";
 
 /**
@@ -293,8 +318,9 @@ int main()
 	// VAOを作成する.
 	const GLuint vboPosition = GLContext::CreateBuffer(sizeof(positions), positions);
 	const GLuint vboColor = GLContext::CreateBuffer(sizeof(colors), colors);
+	const GLuint vboTexcoord = GLContext::CreateBuffer(sizeof(texcoords), texcoords);
 	const GLuint ibo = GLContext::CreateBuffer(sizeof(indices), indices);
-	const GLuint vao = GLContext::CreateVertexArray(vboPosition, vboColor, ibo);
+	const GLuint vao = GLContext::CreateVertexArray(vboPosition, vboColor, vboTexcoord, ibo);
 	if (!vao)
 	{
 		return 1;
@@ -323,6 +349,13 @@ int main()
 		return 1;
 	}
 
+	//サンプラを作成
+	const GLuint sampler = GLContext::CreateSampler(GL_REPEAT);
+	if (!sampler)
+	{
+		return 1;
+	}
+
 	//メインループ
 	while (!glfwWindowShouldClose(window))
 	{
@@ -333,6 +366,7 @@ int main()
 
 		glBindVertexArray(vao);
 		glBindProgramPipeline(pipeline);
+		glBindSampler(0, sampler);
 		float s = sin(glm::radians(degree));
 		float c = cos(glm::radians(degree));
 		degree += 0.01f;
@@ -372,6 +406,7 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
+		glBindSampler(0, 0);
 		glBindProgramPipeline(0);
 		glBindVertexArray(0);
 
@@ -380,6 +415,7 @@ int main()
 	}
 
 	//後始末
+	glDeleteSamplers(1, &sampler);
 	glDeleteTextures(1, &texGround);
 	glDeleteTextures(1, &texTriangle);
 	glDeleteProgramPipelines(1, &pipeline);
@@ -387,6 +423,7 @@ int main()
 	glDeleteProgram(vp);
 	glDeleteVertexArrays(1, &vao);
 	glDeleteBuffers(1, &ibo);
+	glDeleteBuffers(1, &vboTexcoord);
 	glDeleteBuffers(1, &vboColor);
 	glDeleteBuffers(1, &vboPosition);
 
