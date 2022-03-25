@@ -391,8 +391,8 @@ int main()
 	//テクスチャ作成
 	const GLuint texGround = GLContext::CreateImage2D("Res/Ground.tga");
 	const GLuint texTriangle = GLContext::CreateImage2D("Res/Triangle.tga");
-	const GLuint texGreen = GLContext::CreateImage2D(imageGreenWidth, imageGreenHeight, imageGreen, GL_RGBA);
-	const GLuint texRoad = GLContext::CreateImage2D(imageRoadWidth, imageRoadHeight, imageRoad, GL_RGBA);
+	const GLuint texGreen = GLContext::CreateImage2D(imageGreenWidth, imageGreenHeight, imageGreen, GL_RGBA, GL_UNSIGNED_BYTE);
+	const GLuint texRoad = GLContext::CreateImage2D(imageRoadWidth, imageRoadHeight, imageRoad, GL_RGBA, GL_UNSIGNED_BYTE);
 	if (!texGround || !texTriangle || !texGreen || !texRoad)
 	{
 		return 1;

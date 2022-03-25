@@ -163,11 +163,12 @@ namespace GLContext
 	*	@param height	画像の高さ(ピクセル数)
 	*	@param data		画像データのアドレス
 	*	@param pixelFormat	画像データ形式(GL_BGRAなど)
+	*	@param type		画像データの型
 	*
 	*	@retval 0以外	作成したテクスチャオブジェクトのID
 	*	@retval 0		テクスチャの作成失敗
 	*/
-	GLuint CreateImage2D(GLsizei width, GLsizei height, const void* data, GLenum pixelFormat)
+	GLuint CreateImage2D(GLsizei width, GLsizei height, const void* data, GLenum pixelFormat, GLenum type)
 	{
 		glGetError(); // エラー状態をリセット
 
@@ -177,7 +178,7 @@ namespace GLContext
 		glTextureStorage2D(id, 1, GL_RGBA8, width, height);
 
 		// GPUメモリにデータを転送する
-		glTextureSubImage2D(id, 0, 0, 0, width, height, pixelFormat, GL_UNSIGNED_BYTE, data);
+		glTextureSubImage2D(id, 0, 0, 0, width, height, pixelFormat, type, data);
 		const GLenum result = glGetError();
 		if (result != GL_NO_ERROR)
 		{
@@ -233,8 +234,15 @@ namespace GLContext
 		std::vector<uint8_t> buf(imageSize);
 		ifs.read(reinterpret_cast<char*>(buf.data()), imageSize);
 
+		// データの型を選ぶ
+		GLenum type = GL_UNSIGNED_BYTE;
+		if (tgaHeader[16] == 16)
+		{
+			type = GL_UNSIGNED_SHORT_1_5_5_5_REV;
+		}
+
 		// 読み込んだ画像データからテクスチャを作成する
-		return CreateImage2D(width, height, buf.data(), GL_BGRA);
+		return CreateImage2D(width, height, buf.data(), GL_BGRA, type);
 	}
 
 	/**
