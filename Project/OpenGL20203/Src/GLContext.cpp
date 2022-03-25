@@ -3,8 +3,10 @@
 */
 #include "GLContext.h"
 #include <glm/glm.hpp>
-#include <iostream>
+#include <cstdint>
+#include <fstream>
 #include <vector>
+#include <iostream>
 
 /**
 *	OpenGLコンテキストに関する機能を格納する名前空間
@@ -184,6 +186,54 @@ namespace GLContext
 		}
 
 		return id;
+	}
+
+	/**
+	*	ファイルから2Dテクスチャを読み込む
+	*
+	*	@param filename 2Dテクスチャとして読み込むファイル名
+	*
+	*	@retval 0以外	作成したテクスチャオブジェクトのID
+	*	@retval 0		テクスチャの作成に失敗
+	*/
+	GLuint CreateImage2D(const char* filename)
+	{
+		// ファイルを開く
+		std::ifstream ifs;
+		ifs.open(filename, std::ios_base::binary);
+		if (!ifs)
+		{
+			std::cerr << "[エラー]" << __func__ << ":'" << filename << "'を開けません\n";
+			return 0;
+		}
+
+		// TGAヘッダを読み込む
+		uint8_t tgaHeader[18]; // TGAヘッダ(18バイト)
+		ifs.read(reinterpret_cast<char*>(tgaHeader), 18);
+
+		// イメージIDを読み飛ばす
+		ifs.ignore(tgaHeader[0]);
+
+		// カラーマップを読み飛ばす
+		if (tgaHeader[1])
+		{
+			const int colorMapLength = tgaHeader[5]+ tgaHeader[6] * 0x100;
+			const int colorMapEntrySize = tgaHeader[7];
+			//エントリーサイズはビット数なので、8で割ってバイト数に変換する
+			const int colorMapSize = (colorMapLength * colorMapEntrySize + 7) / 8;
+			ifs.ignore(colorMapSize);
+		}
+
+		// 画像データを読み込む
+		const int width = tgaHeader[12] + tgaHeader[13] * 0x100;
+		const int height = tgaHeader[14] + tgaHeader[15] * 0x100;
+		const int pixelDepth = tgaHeader[16];
+		const int imageSize = width * height * pixelDepth / 8;
+		std::vector<uint8_t> buf(imageSize);
+		ifs.read(reinterpret_cast<char*>(buf.data()), imageSize);
+
+		// 読み込んだ画像データからテクスチャを作成する
+		return CreateImage2D(width, height, buf.data());
 	}
 
 	/**

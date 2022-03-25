@@ -91,10 +91,10 @@ const Color colors[] =
 const glm::vec2 texcoords[] =
 {
 	//地面
-	{-4.0f,-4.0f },
-	{ 4.0f,-4.0f },
-	{ 4.0f, 4.0f },
-	{-4.0f, 4.0f },
+	{ 0.0f, 0.0f },
+	{ 1.0f, 0.0f },
+	{ 1.0f, 1.0f },
+	{ 0.0f, 1.0f },
 
 	//四角形
 	{ 0.0f, 0.0f },
@@ -389,7 +389,7 @@ int main()
 	float degree = 0;
 
 	//テクスチャ作成
-	const GLuint texGround = GLContext::CreateImage2D(imageGroundWidth, imageGroundHeight, imageGround);
+	const GLuint texGround = GLContext::CreateImage2D("Res/Ground.tga");
 	const GLuint texTriangle = GLContext::CreateImage2D(imageTriangleWidth, imageTriangleHeight, imageTriangle);
 	const GLuint texGreen = GLContext::CreateImage2D(imageGreenWidth, imageGreenHeight, imageGreen);
 	const GLuint texRoad = GLContext::CreateImage2D(imageRoadWidth, imageRoadHeight, imageRoad);

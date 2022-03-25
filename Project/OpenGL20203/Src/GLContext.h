@@ -27,6 +27,7 @@ namespace GLContext
 	GLuint CreateProgram(GLenum type, const GLchar* code);
 	GLuint Createpipeline(GLuint vp, GLuint fp);
 	GLuint CreateImage2D(GLsizei width, GLsizei height,const void* data);
+	GLuint CreateImage2D(const char* path);
 	GLuint CreateSampler(GLenum wrapMode);
 } // GLContext
 
