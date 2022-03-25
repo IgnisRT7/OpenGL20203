@@ -35,7 +35,7 @@ namespace GLContext
 	*
 	*	@return çÏê¨ÇµÇΩVAO
 	*/
-	GLuint CreateVertexArray(GLuint vboPosition, GLuint vboColor, GLuint ibo)
+	GLuint CreateVertexArray(GLuint vboPosition, GLuint vboColor, GLuint vboTexcoord, GLuint ibo)
 	{
 		if (!vboPosition || !vboColor || !ibo)
 		{

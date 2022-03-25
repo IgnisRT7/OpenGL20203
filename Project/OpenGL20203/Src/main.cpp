@@ -87,6 +87,15 @@ const Color colors[] =
 	{1.0f, 1.0f, 1.0f, 1.0f},
 };
 
+/// テクスチャ座標データ
+const glm::vec2 texcoords[] =
+{
+	{ 0.0f, 0.0f },
+	{ 1.0f, 0.0f },
+	{ 1.0f, 1.0f },
+	{ 0.0f, 1.0f },
+}
+
 // インデックスデータ
 const GLushort indices[] =
 {
