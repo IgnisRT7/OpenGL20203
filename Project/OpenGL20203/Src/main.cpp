@@ -14,10 +14,10 @@
 const Position positions[] = 
 {
 	// 地面
-	{-20.0f, 0.0f, 20.0f},
-	{ 20.0f, 0.0f, 20.0f},
-	{ 20.0f, 0.0f,-20.0f},
-	{-20.0f, 0.0f,-20.0f},
+	{-20.0f, -10.0f, 20.0f},
+	{ 20.0f, -10.0f, 20.0f},
+	{ 20.0f, -10.0f,-20.0f},
+	{-20.0f, -10.0f,-20.0f},
 
 	{-0.2f, -0.5f, 0.1f},
 	{ 0.3f, -0.5f, 0.1f},
@@ -27,15 +27,15 @@ const Position positions[] =
 	{-0.2f, -0.5f, 0.1f},
 	
 	//三角形x3
-	{-0.33f * 5, 2.0f * 5, 0.5f },
-	{ 0.33f * 5, 2.0f * 5, 0.5f },
-	{ 0.0f * 5,  1.0f * 5, 0.5f },
-	{ 0.33f * 5, 2.0f * 5, 0.5f },
-	{ 0.99f * 5, 2.0f * 5, 0.5f },
-	{ 0.66f * 5, 1.0f * 5, 0.5f },
-	{ 0.0f * 5,  1.0f * 5, 0.5f },
-	{ 0.66f * 5, 1.0f * 5, 0.5f },
-	{ 0.33f * 5, 0.0f * 5, 0.5f },
+	{(-0.33f / 2.0f) * 10.0f, (0.5f / 2.0f) * 10.0f, 0.6f },
+	{(0.33f / 2.0f) * 10.0f, (0.5f / 2.0f) * 10.0f, 0.6f },
+	{(0.00f / 2.0f) * 10.0f, (-0.5f / 2.0f) * 10.0f, 0.6f },
+	{(-0.33f / 2.0f - 0.165f) * 10.0f, (0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
+	{(0.33f / 2.0f - 0.165f) * 10.0f, (0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
+	{(0.00f / 2.0f - 0.165f) * 10.0f, (-0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
+	{(-0.33f / 2.0f + 0.165f) * 10.0f, (0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
+	{(0.33f / 2.0f + 0.165f) * 10.0f, (0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
+	{(0.00f / 2.0f + 0.165f) * 10.0f, (-0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
 
 	//立方体
 	{ 0.0f, 0.0f, 2.0f },
@@ -132,12 +132,12 @@ const GLuint imageGround[imageGroundWidth * imageGroundHeight] =
 };
 const GLuint imageTriangle[imageTriangleWidth * imageTriangleHeight] = 
 {
-	W, B, W, B, W, B,
-	B, W, B, W, B, W,
-	W, B, W, B, W, B,
-	B, W, B, W, B, W,
-	W, B, W, B, W, B,
-	B, W, B, W, B, W,
+	W, X, W, X, W, X,
+	W, X, W, X, W, X,
+	W, X, W, X, W, X,
+	W, X, W, X, W, X,
+	W, X, W, X, W, X,
+	W, X, W, X, W, X,
 };
 
 /// 頂点シェーダー.
@@ -353,10 +353,11 @@ int main()
 		glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matMVP[0][0]);
 
 		glBindTextureUnit(0, texGround); // テクスチャを割り当てる
-
 		primGround.Draw();
+
+		glBindTextureUnit(0, texTriangle);
 		primTriangles.Draw();
-		//primCube.Draw();
+		primCube.Draw();
 
 		// テクスチャの割り当てを解除
 		glActiveTexture(GL_TEXTURE0);
