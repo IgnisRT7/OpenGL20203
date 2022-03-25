@@ -26,7 +26,7 @@ namespace GLContext
 	GLuint CreateVertexArray(GLuint vboPosition, GLuint vboColor, GLuint vboTexcoord, GLuint ibo);
 	GLuint CreateProgram(GLenum type, const GLchar* code);
 	GLuint Createpipeline(GLuint vp, GLuint fp);
-	GLuint CreateImage2D(GLsizei width, GLsizei height,const void* data);
+	GLuint CreateImage2D(GLsizei width, GLsizei height, const void* data, GLenum pixelFormat);
 	GLuint CreateImage2D(const char* path);
 	GLuint CreateSampler(GLenum wrapMode);
 } // GLContext

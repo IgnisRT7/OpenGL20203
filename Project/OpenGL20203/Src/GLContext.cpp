@@ -162,11 +162,12 @@ namespace GLContext
 	*	@param width	画像の幅(ピクセル数)
 	*	@param height	画像の高さ(ピクセル数)
 	*	@param data		画像データのアドレス
+	*	@param pixelFormat	画像データ形式(GL_BGRAなど)
 	*
 	*	@retval 0以外	作成したテクスチャオブジェクトのID
 	*	@retval 0		テクスチャの作成失敗
 	*/
-	GLuint CreateImage2D(GLsizei width, GLsizei height, const void* data)
+	GLuint CreateImage2D(GLsizei width, GLsizei height, const void* data, GLenum pixelFormat)
 	{
 		glGetError(); // エラー状態をリセット
 
@@ -176,7 +177,7 @@ namespace GLContext
 		glTextureStorage2D(id, 1, GL_RGBA8, width, height);
 
 		// GPUメモリにデータを転送する
-		glTextureSubImage2D(id, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glTextureSubImage2D(id, 0, 0, 0, width, height, pixelFormat, GL_UNSIGNED_BYTE, data);
 		const GLenum result = glGetError();
 		if (result != GL_NO_ERROR)
 		{
@@ -233,7 +234,7 @@ namespace GLContext
 		ifs.read(reinterpret_cast<char*>(buf.data()), imageSize);
 
 		// 読み込んだ画像データからテクスチャを作成する
-		return CreateImage2D(width, height, buf.data());
+		return CreateImage2D(width, height, buf.data(), GL_BGRA);
 	}
 
 	/**
