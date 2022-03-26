@@ -177,8 +177,14 @@ namespace GLContext
 		glCreateTextures(GL_TEXTURE_2D, 1, &id);
 		glTextureStorage2D(id, 1, GL_RGBA8, width, height);
 
+		//現在のアラインメントを記録してから、アラインメントを1にする
+		GLint alignment;
+		glGetIntegerv(GL_UNPACK_ALIGNMENT, &alignment);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
 		// GPUメモリにデータを転送する
 		glTextureSubImage2D(id, 0, 0, 0, width, height, pixelFormat, type, data);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		const GLenum result = glGetError();
 		if (result != GL_NO_ERROR)
 		{
