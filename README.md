@@ -1,3 +1,5 @@
+OpenGLを使った3Dゲームプログラミング
+自身のリハビリも兼ねて
 〇そーす: https://github.com/tn-mai/OpenGL3D2021
 〇ブランチについて(運用の練習中)
  master: とりあえず置いてあるだけ
