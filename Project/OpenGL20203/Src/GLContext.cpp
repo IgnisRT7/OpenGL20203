@@ -193,6 +193,13 @@ namespace GLContext
 			return 0;
 		}
 
+		// 白黒画像の場合、(R,R,R,1)として読み取られるように設定する
+		if (pixelFormat == GL_RED)
+		{
+			glTextureParameteri(id, GL_TEXTURE_SWIZZLE_G, GL_RED);
+			glTextureParameteri(id, GL_TEXTURE_SWIZZLE_B, GL_RED);
+		}
+
 		return id;
 	}
 
@@ -247,8 +254,20 @@ namespace GLContext
 			type = GL_UNSIGNED_SHORT_1_5_5_5_REV;
 		}
 
+		//ピクセル形式を選ぶ
+		GLenum pixelFormat = GL_BGRA;
+		if (tgaHeader[2] == 3) //圧縮無し、白黒
+		{
+			pixelFormat = GL_RED;
+		}
+
+		if (tgaHeader[16] == 24)
+		{
+			pixelFormat = GL_BGR;
+		}
+
 		// 読み込んだ画像データからテクスチャを作成する
-		return CreateImage2D(width, height, buf.data(), GL_BGRA, type);
+		return CreateImage2D(width, height, buf.data(), pixelFormat, type);
 	}
 
 	/**
