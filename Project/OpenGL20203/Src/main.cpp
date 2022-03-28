@@ -391,8 +391,8 @@ int main()
 	//テクスチャ作成
 	const GLuint texGround = GLContext::CreateImage2D("Res/Ground.tga");
 	const GLuint texTriangle = GLContext::CreateImage2D("Res/Triangle.tga");
-	const GLuint texGreen = GLContext::CreateImage2D(imageGreenWidth, imageGreenHeight, imageGreen, GL_RGBA, GL_UNSIGNED_BYTE);
-	const GLuint texRoad = GLContext::CreateImage2D(imageRoadWidth, imageRoadHeight, imageRoad, GL_RGBA, GL_UNSIGNED_BYTE);
+	const GLuint texGreen = GLContext::CreateImage2D("Res/Green.tga");
+	const GLuint texRoad = GLContext::CreateImage2D("Res/Road.tga");
 	if (!texGround || !texTriangle || !texGreen || !texRoad)
 	{
 		return 1;
@@ -443,9 +443,6 @@ int main()
 		const glm::mat4 matModel = glm::mat4(1);
 		const glm::mat4 matMVP = matProj * matView * matModel;
 		glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matMVP[0][0]);
-
-		//glBindTextureUnit(0, texGround); // テクスチャを割り当てる
-		//primGround.Draw();
 
 		//立方体の描画
 		glBindTextureUnit(0, texTriangle);
