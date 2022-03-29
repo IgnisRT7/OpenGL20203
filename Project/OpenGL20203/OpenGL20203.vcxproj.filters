@@ -58,5 +58,17 @@
     <Image Include="Res\Tile.tga">
       <Filter>リソース ファイル</Filter>
     </Image>
+    <Image Include="Res\Green.tga">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Res\Road.tga">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Res\Tree.TGA">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Res\WareHouse.tga">
+      <Filter>リソース ファイル</Filter>
+    </Image>
   </ItemGroup>
 </Project>

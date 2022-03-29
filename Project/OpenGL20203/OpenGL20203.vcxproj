@@ -162,9 +162,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Res\Green.tga" />
     <Image Include="Res\Ground.tga" />
+    <Image Include="Res\Road.tga" />
     <Image Include="Res\Tile.tga" />
+    <Image Include="Res\Tree.TGA" />
     <Image Include="Res\Triangle.tga" />
+    <Image Include="Res\WareHouse.tga" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

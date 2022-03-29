@@ -13,12 +13,13 @@
 /// 座標データ
 const Position positions[] = 
 {
-	// 地面
+	// 地面 0 - 3
 	{-2.0f, 0.0f, 2.0f},
 	{ 2.0f, 0.0f, 2.0f},
 	{ 2.0f, 0.0f,-2.0f},
 	{-2.0f, 0.0f,-2.0f},
 
+	// 4 - 9
 	{-0.2f, -0.5f, 0.1f},
 	{ 0.3f, -0.5f, 0.1f},
 	{ 0.3f,  0.3f, 0.1f},
@@ -26,7 +27,7 @@ const Position positions[] =
 	{-0.2f,  0.3f, 0.1f},
 	{-0.2f, -0.5f, 0.1f},
 	
-	//三角形x3
+	//三角形x3 10 - 18
 	{(-0.33f / 2.0f) * 10.0f, (0.5f / 2.0f) * 10.0f, 0.6f },
 	{(0.33f / 2.0f) * 10.0f, (0.5f / 2.0f) * 10.0f, 0.6f },
 	{(0.00f / 2.0f) * 10.0f, (-0.5f / 2.0f) * 10.0f, 0.6f },
@@ -37,7 +38,7 @@ const Position positions[] =
 	{(0.33f / 2.0f + 0.165f) * 10.0f, (0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
 	{(0.00f / 2.0f + 0.165f) * 10.0f, (-0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
 
-	//立方体
+	//立方体 19 - 26
 	{ 0.0f, 0.0f, 2.0f },
 	{ 2.0f, 0.0f, 2.0f },
 	{ 2.0f, 2.0f, 2.0f },
@@ -46,18 +47,47 @@ const Position positions[] =
 	{ 2.0f, 0.0f, 0.0f },
 	{ 2.0f, 2.0f, 0.0f },
 	{ 0.0f, 2.0f, 0.0f },
+
+	//木(葉 27 - 32
+	{ 0.0f, 3.0f, 0.0f},
+	{ 0.0f, 1.0f,-1.0f},
+	{-1.0f, 1.0f, 0.0f},
+	{ 0.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 0.0f},
+	{ 0.0f, 1.0f,-1.0f},
+	//葉 33 - 38
+	{ 0.0f, 2.0f, 0.0f},
+	{ 0.0f, 0.0f,-0.5f},
+	{-0.5f, 0.0f, 0.0f},
+	{ 0.0f, 0.0f, 0.5f},
+	{ 0.5f, 0.0f, 0.0f},
+	{ 0.0f, 0.0f,-0.5f},
+
+	//建物 39 - 50
+	{-2.0f, 0.0f,-2.0f},
+	{-2.0f, 0.0f, 2.0f},
+	{ 2.0f, 0.0f, 2.0f},
+	{ 2.0f, 0.0f,-2.0f},
+	{-2.0f, 0.0f,-2.0f},
+	{-2.0f, 2.0f,-2.0f},
+	{-2.0f, 2.0f, 2.0f},
+	{ 2.0f, 2.0f, 2.0f},
+	{ 2.0f, 2.0f,-2.0f},
+	{-2.0f, 2.0f,-2.0f},
+	{ 2.0f, 2.0f, 2.0f},
+	{ 2.0f, 2.0f,-2.0f},
 };
 
 /// 色データ
 const Color colors[] =
 {
-	//地面 0 - 3
+	//地面
 	{1.0f, 1.0f, 1.0f, 1.0f},
 	{1.0f, 1.0f, 1.0f, 1.0f},
 	{1.0f, 1.0f, 1.0f, 1.0f},
 	{1.0f, 1.0f, 1.0f, 1.0f},
 
-	//四角形 4 - 9
+	//四角形
 	{1.0f, 0.0f, 0.0f, 1.0f},
 	{1.0f, 1.0f, 0.0f, 1.0f},
 	{1.0f, 0.0f, 0.0f, 1.0f},
@@ -65,7 +95,7 @@ const Color colors[] =
 	{0.0f, 1.0f, 1.0f, 1.0f},
 	{0.0f, 0.0f, 1.0f, 1.0f},
 
-	//三角形x3 10 - 18
+	//三角形x3
 	{ 0.0f, 1.0f, 1.0f, 1.0f }, // 水色
 	{ 1.0f, 1.0f, 0.0f, 1.0f }, // 黄色
 	{ 1.0f, 0.0f, 1.0f, 1.0f }, // 紫色
@@ -76,15 +106,40 @@ const Color colors[] =
 	{ 1.0f, 1.0f, 0.0f, 1.0f }, // 黄色
 	{ 1.0f, 0.0f, 1.0f, 1.0f }, // 紫色
 
-	//立方体 19 - 26
-	{1.0f, 1.0f, 1.0f, 1.0f},
-	{1.0f, 1.0f, 1.0f, 1.0f},
-	{1.0f, 1.0f, 1.0f, 1.0f}, 
-	{1.0f, 1.0f, 1.0f, 1.0f}, 
-	{1.0f, 1.0f, 1.0f, 1.0f},
-	{1.0f, 1.0f, 1.0f, 1.0f},
-	{1.0f, 1.0f, 1.0f, 1.0f},
-	{1.0f, 1.0f, 1.0f, 1.0f},
+	//立方体
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f}, 
+	{ 1.0f, 1.0f, 1.0f, 1.0f}, 
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+
+	//木
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	//葉
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+
+	//建物
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
+	{ 1.0f, 1.0f, 1.0f, 1.0f},
 };
 
 /// テクスチャ座標データ
@@ -114,30 +169,73 @@ const glm::vec2 texcoords[] =
 	{ 0.0, 0.1 },
 	{ 1.0, 0.1 },
 	{ 0.5, 0.9 },
+
+	//木
+	{ 0.5f, 1.0f},
+	{ 0.0f, 0.5f},
+	{ 0.25f, 0.5f},
+	{ 0.5f, 0.5f},
+	{ 0.75f, 0.5f},
+	{ 1.0f, 0.5f},
+	//葉
+	{ 0.5f, 0.5f},
+	{ 0.0f, 0.0f},
+	{ 0.25f, 0.0f},
+	{ 0.5f, 0.0f},
+	{ 0.75f, 0.0f},
+	{ 1.0f, 0.0f},
+
+	//建物
+	{0.0f, 0.0f}, 
+	{0.25f, 0.0f},
+	{0.5f, 0.0f},
+	{0.75f, 0.0f},
+	{1.0f, 0.0f},
+	{0.0f, 0.5f},
+	{0.25f, 0.5f},
+	{0.5f, 0.5f},
+	{0.75f, 0.5f},
+	{1.0f, 0.5f},
+	{0.25f, 1.0f},
+	{0.0f, 1.0f},
 };
 
 // インデックスデータ
 const GLushort indices[] =
 {
-	//地面
+	//地面(6) 0 - 5
 	0, 1, 2, 2, 3, 0,
-	//四角ポリゴン
+	//四角ポリゴン(6) 6 - 11
 	4, 5, 6, 7, 8, 9,
-	//三角形x3
-	12, 11, 10, 15, 14, 13, 18, 17, 16,
-	//立方体
-	19, 20, 21, 19, 21, 22, // 手前
-	20, 24, 25, 20, 25, 21, // 右
-	22, 21, 25, 22, 25, 26, // 上
-	19, 23, 26, 19, 26, 22, // 左
-	19, 20, 24, 19, 24, 23, // 下
-	23, 24, 25, 23, 25, 26, // 奥
+	//三角形x3(9) 12 - 20
+	2, 1, 0, 5, 4, 3, 8, 7, 6,
+	//立方体(36) 21 - 56
+	0, 1, 2, 2, 3, 0, 
+	4, 5, 1, 1, 0, 4, 
+	5, 6, 2, 2, 1, 5,
+	6, 7, 3, 3, 2, 6, 
+	7, 4, 0, 0, 3, 7, 
+	7, 6, 5, 5, 4, 7,  
+
+	//木(18) 57 - 74
+	0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 1, 4, 3, 3, 2, 1,
+	//葉(18) 75 - 92
+	6, 7, 8, 6, 8, 9, 6, 9, 10, 6, 10, 11, 7, 10, 9, 9, 8, 7,
+
+	//建物(30) 93 - 122
+	0, 1, 6, 6, 5, 0,
+	1, 2, 7, 7, 6, 1,
+	2, 3, 8, 8, 7, 2,
+	3, 4, 9, 9, 8, 3,
+	5, 6,10,10,11, 5,
 };
 
 //描画データ
 const Primitive primGround(GL_TRIANGLES, 6, 0 * sizeof(GLushort), 0); //四角形
-const Primitive primTriangles(GL_TRIANGLES, 9, 12 * sizeof(GLushort), 0); //三角形
-const Primitive primCube(GL_TRIANGLES, 36, 21 * sizeof(GLushort), 0); //立方体
+const Primitive primTriangles(GL_TRIANGLES, 9, 12 * sizeof(GLushort), 10); //三角形
+const Primitive primCube(GL_TRIANGLES, 36, 21 * sizeof(GLushort), 19); //立方体
+const Primitive primTree(GL_TRIANGLES, 36, 57 * sizeof(GLushort), 27);
+const Primitive primWareHouse(GL_TRIANGLES, 30, 93 * sizeof(GLushort), 39);
 
 //画像データ
 const GLuint X = 0xff'18'18'18; // 黒
@@ -236,14 +334,28 @@ int mapData[10][10] =
 {
 	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
 	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
+	{ 2, 2, 2, 2, 2, 2, 1, 0, 0, 0},
 	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
 	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
 	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
 	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
-	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
-	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
+	{ 0, 0, 0, 1, 2, 2, 2, 2, 2, 2},
 	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0},
 	{ 0, 0, 0, 1, 2, 2, 1, 0, 0, 0}, 
+};
+
+int objectMapData[10][10] =
+{
+	{ 0, 0, 0, 1, 0, 0, 1, 0, 0, 0},
+	{ 0, 0, 0, 1, 0, 0, 1, 0, 0, 0},
+	{ 0, 0, 0, 0, 0, 0, 0, 2, 0, 0},
+	{ 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
+	{ 0, 0, 0, 0, 0, 0, 0, 2, 0, 0},
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{ 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{ 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+	{ 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
 };
 
 /**
@@ -389,11 +501,13 @@ int main()
 	float degree = 0;
 
 	//テクスチャ作成
-	const GLuint texGround = GLContext::CreateImage2D("Res/Ground.tga");
+	const GLuint texGround = GLContext::CreateImage2D("Res/Tile.tga");
 	const GLuint texTriangle = GLContext::CreateImage2D("Res/Triangle.tga");
 	const GLuint texGreen = GLContext::CreateImage2D("Res/Green.tga");
 	const GLuint texRoad = GLContext::CreateImage2D("Res/Road.tga");
-	if (!texGround || !texTriangle || !texGreen || !texRoad)
+	const GLuint texTree = GLContext::CreateImage2D("Res/Tree.tga");
+	const GLuint texWareHouse = GLContext::CreateImage2D("Res/WareHouse.tga");
+	if (!texGround || !texTriangle || !texGreen || !texRoad || !texTree || !texWareHouse)
 	{
 		return 1;
 	}
@@ -430,24 +544,65 @@ int main()
 		matR[1][0] = s;
 		matR[1][1] = c;
 
-		//プロジェクション行列を作成
+		// プロジェクション行列を作成
 		int w, h;
 		glfwGetWindowSize(window, &w, &h);
 		const float aspectRatio =static_cast<float>(w) / static_cast<float>(h);
 		const glm::mat4 matProj = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 200.0f);
 
-		//ビュー行列を作成
-		const glm::mat4 matView = glm::lookAt(glm::vec3(0, 20, 20), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+		// ビュー行列を作成
+		const glm::mat4 matView = glm::lookAt(glm::vec3(0, 20, -20), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
-		//行列をシェーダに転送する
+		// 行列をシェーダに転送する
 		const glm::mat4 matModel = glm::mat4(1);
 		const glm::mat4 matMVP = matProj * matView * matModel;
 		glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matMVP[0][0]);
 
-		//立方体の描画
+		// 立方体の描画
 		glBindTextureUnit(0, texTriangle);
 		primTriangles.Draw();
 		primCube.Draw();
+
+		// マップに配置する物体の表示データ
+		struct ObjectData
+		{
+			Primitive prim; //表示するプリミティブ
+			GLuint tex; //プリミティブに貼るテクスチャ
+		};
+
+		//描画する物体のリスト
+		const ObjectData objectList[] =
+		{
+			{ Primitive(), 0}, // なし
+			{ primTree, texTree}, // 木
+			{ primWareHouse, texWareHouse}, //家
+		};
+
+		//木を植える
+		for (int y = 0; y < 10; ++y)
+		{
+			for (int x = 0; x < 10; ++x)
+			{
+				// 描画する物体の番号を取得.
+				const int objectNo = objectMapData[y][x];
+				if (objectNo <= 0 || objectNo >= std::size(objectList))
+				{
+					continue;
+				}
+				const ObjectData p = objectList[objectNo];
+				
+				// 四角形が4x4mなので、xとyを4倍した位置に表示する.
+				const glm::vec3 position(x * 4 - 20, 0, y * 4 - 20);
+				
+				// 行列をシェーダに転送する 
+				const glm::mat4 matModel = glm::translate(glm::mat4(1), position);
+				const glm::mat4 matMVP = matProj * matView * matModel;
+				glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matMVP[0][0]);
+				
+				glBindTextureUnit(0, p.tex); // テクスチャを割り当てる.
+				p.prim.Draw();
+			}
+		}
 
 		//マップを(-20-20)-(20,20)の範囲に描画
 		const GLuint mapTexList[] = {texGreen, texGround, texRoad };
