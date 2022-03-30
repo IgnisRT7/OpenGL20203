@@ -247,6 +247,26 @@ namespace GLContext
 		std::vector<uint8_t> buf(imageSize);
 		ifs.read(reinterpret_cast<char*>(buf.data()), imageSize);
 
+		//TGAヘッダ18バイト目の第５ビットは、画像データの格納方向を表す
+		//	0の場合: 下から上
+		//	1の場合: 上から下
+		//OpenGLは画像データを下から上に格納するルールになっているので
+		//TGAが「上から下」に格納されている場合は画像を上下反転にする
+		if (tgaHeader[17] & 0x20)
+		{
+			const size_t lineSize = width * pixelDepth / 8;
+			std::vector<uint8_t> tmp(imageSize);
+			std::vector<uint8_t>::iterator source = buf.begin();
+			std::vector<uint8_t>::iterator destination = tmp.end();
+			for (size_t i = 0; i < height; ++i)
+			{
+				destination -= lineSize;
+				std::copy(source, source + lineSize, destination);
+				source += lineSize;
+			}
+			buf.swap(tmp);
+		}
+
 		// データの型を選ぶ
 		GLenum type = GL_UNSIGNED_BYTE;
 		if (tgaHeader[16] == 16)
