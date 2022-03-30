@@ -170,6 +170,10 @@ const glm::vec2 texcoords[] =
 	{ 1.0, 0.1 },
 	{ 0.5, 0.9 },
 
+	//立方体
+	{ 0.0f, 0.0f}, { 0.0f, 0.0f}, { 0.0f, 0.0f}, { 0.0f, 0.0f},
+	{ 0.0f, 0.0f}, { 0.0f, 0.0f}, { 0.0f, 0.0f}, { 0.0f, 0.0f},
+
 	//木
 	{ 0.5f, 1.0f},
 	{ 0.0f, 0.5f},
@@ -177,7 +181,8 @@ const glm::vec2 texcoords[] =
 	{ 0.5f, 0.5f},
 	{ 0.75f, 0.5f},
 	{ 1.0f, 0.5f},
-	//葉
+
+  // 木(幹)
 	{ 0.5f, 0.5f},
 	{ 0.0f, 0.0f},
 	{ 0.25f, 0.0f},
@@ -186,18 +191,9 @@ const glm::vec2 texcoords[] =
 	{ 1.0f, 0.0f},
 
 	//建物
-	{0.0f, 0.0f}, 
-	{0.25f, 0.0f},
-	{0.5f, 0.0f},
-	{0.75f, 0.0f},
-	{1.0f, 0.0f},
-	{0.0f, 0.5f},
-	{0.25f, 0.5f},
-	{0.5f, 0.5f},
-	{0.75f, 0.5f},
-	{1.0f, 0.5f},
-	{0.25f, 1.0f},
-	{0.0f, 1.0f},
+	{ 0.0f, 0.0f}, { 0.25f, 0.0f}, { 0.5f, 0.0f}, { 0.75f, 0.0f}, { 1.0f, 0.0f},
+	{ 0.0f, 0.5f}, { 0.25f, 0.5f}, { 0.5f, 0.5f}, { 0.75f, 0.5f}, { 1.0f, 0.5f},
+	{ 0.25f, 1.0f}, { 0.0f, 1.0f},
 };
 
 // インデックスデータ
@@ -551,7 +547,7 @@ int main()
 		const glm::mat4 matProj = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 200.0f);
 
 		// ビュー行列を作成
-		const glm::mat4 matView = glm::lookAt(glm::vec3(0, 20, -20), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+		const glm::mat4 matView = glm::lookAt(glm::vec3(0, 20, 20), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
 		// 行列をシェーダに転送する
 		const glm::mat4 matModel = glm::mat4(1);
