@@ -284,13 +284,6 @@ const GLushort indexWarehouse[] =
 	5, 6,10,10,11, 5,
 };
 
-//描画データ
-const Primitive primGround(GL_TRIANGLES, 6, 0 * sizeof(GLushort), 0); //四角形
-const Primitive primTriangles(GL_TRIANGLES, 9, 12 * sizeof(GLushort), 10); //三角形
-const Primitive primCube(GL_TRIANGLES, 36, 21 * sizeof(GLushort), 19); //立方体
-const Primitive primTree(GL_TRIANGLES, 36, 57 * sizeof(GLushort), 27);
-const Primitive primWareHouse(GL_TRIANGLES, 30, 93 * sizeof(GLushort), 39);
-
 //画像データ
 const GLuint X = 0xff'18'18'18; // 黒
 const GLuint W = 0xff'ff'ff'ff; // 白
@@ -474,15 +467,15 @@ int main()
 	glDebugMessageCallback(DebugCallback, nullptr);
 	
 	// VAOを作成する.
-	const GLuint vboPosition = GLContext::CreateBuffer(sizeof(positions), positions);
-	const GLuint vboColor = GLContext::CreateBuffer(sizeof(colors), colors);
-	const GLuint vboTexcoord = GLContext::CreateBuffer(sizeof(texcoords), texcoords);
-	const GLuint ibo = GLContext::CreateBuffer(sizeof(indices), indices);
-	const GLuint vao = GLContext::CreateVertexArray(vboPosition, vboColor, vboTexcoord, ibo);
-	if (!vao)
-	{
-		return 1;
-	}
+	PrimitiveBuffer primitiveBuffer(100'000, 300'000);
+
+	//描画データの追加
+	primitiveBuffer.Add(std::size(posGround), posGround, colGround, tcGround, std::size(indexGround), indexGround);
+	primitiveBuffer.Add(std::size(posRectAngle), posRectAngle, colRectangle, tcRectangle, std::size(indexRectangle), indexRectangle);
+	primitiveBuffer.Add(std::size(posTriangles), posTriangles, colTriangles, tcTriangles, std::size(indexTriangles), indexTriangles);
+	primitiveBuffer.Add(std::size(posCube), posCube, colCube, tcCube, std::size(indexCube), indexCube);
+	primitiveBuffer.Add(std::size(posTree), posTree, colTree, tcTree, std::size(indexTree), indexTree);
+	primitiveBuffer.Add(std::size(posWarehouse), posWarehouse, colWarehouse, tcWarehouse, std::size(indexWarehouse), indexWarehouse);
 
 	//パイプラインオブジェクトを作成する
 	const GLuint vp = GLContext::CreateProgram(GL_VERTEX_SHADER, vsCode);
@@ -642,11 +635,6 @@ int main()
 	glDeleteProgramPipelines(1, &pipeline);
 	glDeleteProgram(fp);
 	glDeleteProgram(vp);
-	glDeleteVertexArrays(1, &vao);
-	glDeleteBuffers(1, &ibo);
-	glDeleteBuffers(1, &vboTexcoord);
-	glDeleteBuffers(1, &vboColor);
-	glDeleteBuffers(1, &vboPosition);
 
 	//GLFWの終了
 	glfwTerminate();
