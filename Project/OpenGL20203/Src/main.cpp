@@ -5,6 +5,7 @@
 #include "GLContext.h"
 #include "Primitive.h"
 #include "ProgramPipeline.h"
+#include "Texture.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 #include <string>
@@ -182,16 +183,12 @@ int main()
 	float degree = 0;
 
 	//テクスチャ作成
-	const GLuint texGround = GLContext::CreateImage2D("Res/Tile.tga");
-	const GLuint texTriangle = GLContext::CreateImage2D("Res/Triangle.tga");
-	const GLuint texGreen = GLContext::CreateImage2D("Res/Green.tga");
-	const GLuint texRoad = GLContext::CreateImage2D("Res/Road.tga");
-	const GLuint texTree = GLContext::CreateImage2D("Res/Tree.tga");
-	const GLuint texWareHouse = GLContext::CreateImage2D("Res/WareHouse.tga");
-	if (!texGround || !texTriangle || !texGreen || !texRoad || !texTree || !texWareHouse)
-	{
-		return 1;
-	}
+	Texture texGround = Texture("Res/Tile.tga");
+	Texture texTriangle = Texture("Res/Triangle.tga");
+	Texture texGreen = Texture("Res/Green.tga");
+	Texture texRoad = Texture("Res/Road.tga");
+	Texture texTree = Texture("Res/Tree.tga");
+	Texture texWarehouse = Texture("Res/WareHouse.tga");
 
 	//サンプラを作成
 	const GLuint sampler = GLContext::CreateSampler(GL_REPEAT);
@@ -240,8 +237,8 @@ int main()
 		pipeline.SetUniform(locMatTRS, matMVP);
 		pipeline.SetUniform(locMatModel, matModel);
 
-		// 立方体の描画
-		glBindTextureUnit(0, texTriangle);
+		// 三角形と立方体の描画
+		texTriangle.Bind(0);
 		primitiveBuffer.Get(2).Draw();
 		primitiveBuffer.Get(3).Draw();
 
@@ -249,15 +246,15 @@ int main()
 		struct ObjectData
 		{
 			Primitive prim; //表示するプリミティブ
-			GLuint tex; //プリミティブに貼るテクスチャ
+			const Texture* tex; //プリミティブに貼るテクスチャ
 		};
 
 		//描画する物体のリスト
 		const ObjectData objectList[] =
 		{
 			{ Primitive(), 0}, // なし
-			{ primitiveBuffer.Get(4), texTree}, // 木
-			{ primitiveBuffer.Get(5), texWareHouse}, //家
+			{ primitiveBuffer.Get(4), &texTree}, // 木
+			{ primitiveBuffer.Get(5), &texWarehouse}, //家
 		};
 
 		//木を植える
@@ -282,13 +279,13 @@ int main()
 				pipeline.SetUniform(locMatTRS, matMVP);
 				pipeline.SetUniform(locMatModel, matModel);
 				
-				glBindTextureUnit(0, p.tex); // テクスチャを割り当てる.
+				p.tex->Bind(0);
 				p.prim.Draw();
 			}
 		}
 
 		//マップを(-20-20)-(20,20)の範囲に描画
-		const GLuint mapTexList[] = {texGreen, texGround, texRoad };
+		const Texture* mapTexList[] = { &texGreen, &texGround, &texRoad };
 		for (int y = 0; y < 10; ++y)
 		{
 			for (int x = 0; x < 10; ++x)
@@ -303,7 +300,7 @@ int main()
 				pipeline.SetUniform(locMatModel, matModel);
 
 				const int textureNo = mapData[y][x];
-				glBindTextureUnit(0, mapTexList[textureNo]);
+				mapTexList[textureNo]->Bind(0);
 				primitiveBuffer.Get(0).Draw();
 			}
 		}
@@ -322,8 +319,6 @@ int main()
 
 	//後始末
 	glDeleteSamplers(1, &sampler);
-	glDeleteTextures(1, &texGround);
-	glDeleteTextures(1, &texTriangle);
 
 	//GLFWの終了
 	glfwTerminate();
