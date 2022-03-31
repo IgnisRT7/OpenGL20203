@@ -168,7 +168,7 @@ int main()
 	primitiveBuffer.AddFromObjeFile("Res/Warehouse.obj");
 
 	//パイプラインオブジェクトを作成する
-	ProgramPipeline pipeline("Res/Simple.vert", "Res/Simple.frag");
+	ProgramPipeline pipeline("Res/VertexLighting.vert", "Res/Simple.frag");
 	if(!pipeline.IsValid())
 	{
 		return 1;
@@ -176,6 +176,7 @@ int main()
 
 	// uniform変数の位置
 	const GLint locMatTRS = 0;
+	const GLint locMatModel = 1; // モデル行列用ユニフォーム変数の位置
 
 	//座標返還行列の回転角度
 	float degree = 0;
@@ -237,6 +238,7 @@ int main()
 		const glm::mat4 matModel = glm::mat4(1);
 		const glm::mat4 matMVP = matProj * matView * matModel;
 		pipeline.SetUniform(locMatTRS, matMVP);
+		pipeline.SetUniform(locMatModel, matModel);
 
 		// 立方体の描画
 		glBindTextureUnit(0, texTriangle);
@@ -278,6 +280,7 @@ int main()
 				const glm::mat4 matModel = glm::translate(glm::mat4(1), position);
 				const glm::mat4 matMVP = matProj * matView * matModel;
 				pipeline.SetUniform(locMatTRS, matMVP);
+				pipeline.SetUniform(locMatModel, matModel);
 				
 				glBindTextureUnit(0, p.tex); // テクスチャを割り当てる.
 				p.prim.Draw();
@@ -297,6 +300,7 @@ int main()
 				const glm::mat4 matModel = glm::translate(glm::mat4(1), position);
 				const glm::mat4 matMVP = matProj * matView * matModel;
 				pipeline.SetUniform(locMatTRS, matMVP);
+				pipeline.SetUniform(locMatModel, matModel);
 
 				const int textureNo = mapData[y][x];
 				glBindTextureUnit(0, mapTexList[textureNo]);

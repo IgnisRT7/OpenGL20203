@@ -19,6 +19,9 @@
     <Filter Include="リソース ファイル\Images">
       <UniqueIdentifier>{ab51ec49-77bd-4479-9044-c5a60fb6c50f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\Shader">
+      <UniqueIdentifier>{db9dc50d-86cb-4389-bda5-a962d7dc1e8f}</UniqueIdentifier>
+    </Filter>
     <Filter Include="リソース ファイル\Objects">
       <UniqueIdentifier>{01da497e-a854-4d75-9137-a8474cfd4550}</UniqueIdentifier>
     </Filter>
@@ -60,10 +63,13 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Res\Simple.vert">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Shader</Filter>
     </None>
     <None Include="Res\Simple.frag">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Shader</Filter>
+    </None>
+    <None Include="Res\VertexLighting.vert">
+      <Filter>リソース ファイル\Shader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
