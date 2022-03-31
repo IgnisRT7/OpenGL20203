@@ -37,6 +37,7 @@ bool CopyData(GLuint writeBuffer, GLsizei unitSize,
 			size << ", offset=" << offset << ").\n";
 		return false;
 	}
+	return true;
 }
 
 /**
@@ -53,7 +54,7 @@ void Primitive::Draw() const
 *	@param maxVertexCount	Ši”[‰Â”\‚ÈÅ‘å’·“_”
 *	@param maxIndexCount	Ši”[‰Â”\‚ÈÅ‘åƒCƒ“ƒfƒbƒNƒX”
 */
-PrimitiveBuffer::PrimitiveBuffer(GLsizei maxVertexCount, GLsizei maxIdexCount)
+PrimitiveBuffer::PrimitiveBuffer(GLsizei maxVertexCount, GLsizei maxIndexCount)
 {
 	//VBO, IBO, VAO‚ðì¬
 	vboPosition = GLContext::CreateBuffer(sizeof(glm::vec3) * maxVertexCount, nullptr);

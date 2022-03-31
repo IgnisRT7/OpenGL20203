@@ -519,7 +519,7 @@ int main()
 		glClearColor(0.1f, 0.3f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glBindVertexArray(vao);
+		primitiveBuffer.BindVertexArray();
 		glBindProgramPipeline(pipeline);
 		glBindSampler(0, sampler);
 		float s = sin(glm::radians(degree));
@@ -552,8 +552,8 @@ int main()
 
 		// 立方体の描画
 		glBindTextureUnit(0, texTriangle);
-		primTriangles.Draw();
-		primCube.Draw();
+		primitiveBuffer.Get(2).Draw();
+		primitiveBuffer.Get(3).Draw();
 
 		// マップに配置する物体の表示データ
 		struct ObjectData
@@ -566,8 +566,8 @@ int main()
 		const ObjectData objectList[] =
 		{
 			{ Primitive(), 0}, // なし
-			{ primTree, texTree}, // 木
-			{ primWareHouse, texWareHouse}, //家
+			{ primitiveBuffer.Get(4), texTree}, // 木
+			{ primitiveBuffer.Get(5), texWareHouse}, //家
 		};
 
 		//木を植える
@@ -612,7 +612,7 @@ int main()
 
 				const int textureNo = mapData[y][x];
 				glBindTextureUnit(0, mapTexList[textureNo]);
-				primGround.Draw();
+				primitiveBuffer.Get(0).Draw();
 			}
 		}
 
@@ -622,7 +622,7 @@ int main()
 
 		glBindSampler(0, 0);
 		glBindProgramPipeline(0);
-		glBindVertexArray(0);
+		primitiveBuffer.UnbindVertexArray();
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
