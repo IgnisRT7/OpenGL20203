@@ -10,79 +10,6 @@
 #include <iostream>
 #pragma comment(lib,"opengl32.lib")
 
-/// 座標データ: 四角形
-const glm::vec3 posRectAngle[] =
-{	
-	{-0.2f, -0.5f, 0.1f},
-	{ 0.3f, -0.5f, 0.1f},
-	{ 0.3f,  0.3f, 0.1f},
-	{ 0.3f,  0.3f, 0.1f},
-	{-0.2f,  0.3f, 0.1f},
-	{-0.2f, -0.5f, 0.1f},
-};
-
-/// 座標データ:三角形
-const glm::vec3 posTriangles[] =
-{
-	{(-0.33f / 2.0f) * 10.0f, (0.5f / 2.0f) * 10.0f, 0.6f },
-	{(0.33f / 2.0f) * 10.0f, (0.5f / 2.0f) * 10.0f, 0.6f },
-	{(0.00f / 2.0f) * 10.0f, (-0.5f / 2.0f) * 10.0f, 0.6f },
-	{(-0.33f / 2.0f - 0.165f) * 10.0f, (0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
-	{(0.33f / 2.0f - 0.165f) * 10.0f, (0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
-	{(0.00f / 2.0f - 0.165f) * 10.0f, (-0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
-	{(-0.33f / 2.0f + 0.165f) * 10.0f, (0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
-	{(0.33f / 2.0f + 0.165f) * 10.0f, (0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
-	{(0.00f / 2.0f + 0.165f) * 10.0f, (-0.5f / 2.0f + 0.5f) * 10.0f, 0.6f },
-};
-
-/// 座標データ:立方体 
-const glm::vec3 posCube[] =
-{
-	{ 0.0f, 0.0f, 2.0f },
-	{ 2.0f, 0.0f, 2.0f },
-	{ 2.0f, 2.0f, 2.0f },
-	{ 0.0f, 2.0f, 2.0f },
-	{ 0.0f, 0.0f, 0.0f },
-	{ 2.0f, 0.0f, 0.0f },
-	{ 2.0f, 2.0f, 0.0f },
-	{ 0.0f, 2.0f, 0.0f },
-};
-
-/// 座標データ:木
-const glm::vec3 posTree[] =
-{
-	{ 0.0f, 3.0f, 0.0f},
-	{ 0.0f, 1.0f,-1.0f},
-	{-1.0f, 1.0f, 0.0f},
-	{ 0.0f, 1.0f, 1.0f},
-	{ 1.0f, 1.0f, 0.0f},
-	{ 0.0f, 1.0f,-1.0f},
-	
-	{ 0.0f, 2.0f, 0.0f},
-	{ 0.0f, 0.0f,-0.5f},
-	{-0.5f, 0.0f, 0.0f},
-	{ 0.0f, 0.0f, 0.5f},
-	{ 0.5f, 0.0f, 0.0f},
-	{ 0.0f, 0.0f,-0.5f},
-};
-
-/// 座標データ:建物
-const glm::vec3 posWarehouse[] =
-{
-	{ -2.0f, 0.0f, -2.0f },
-	{-2.0f, 0.0f, 2.0f},
-	{ 2.0f, 0.0f, 2.0f},
-	{ 2.0f, 0.0f,-2.0f},
-	{-2.0f, 0.0f,-2.0f},
-	{-2.0f, 2.0f,-2.0f},
-	{-2.0f, 2.0f, 2.0f},
-	{ 2.0f, 2.0f, 2.0f},
-	{ 2.0f, 2.0f,-2.0f},
-	{-2.0f, 2.0f,-2.0f},
-	{ 2.0f, 2.0f, 2.0f},
-	{ 2.0f, 2.0f,-2.0f},
-};
-
 const glm::vec4 colGround[] =
 {
 	{1.0f, 1.0f, 1.0f, 1.0f},
@@ -158,107 +85,6 @@ const glm::vec4 colWarehouse[] =
 	{ 1.0f, 1.0f, 1.0f, 1.0f},
 	{ 1.0f, 1.0f, 1.0f, 1.0f},
 	{ 1.0f, 1.0f, 1.0f, 1.0f},
-};
-
-
-/// テクスチャ座標データ:四角形
-const glm::vec2 tcRectangle[] =
-{
-	{ 0.0f, 0.0f },
-	{ 0.0f, 0.0f },
-	{ 0.0f, 0.0f },
-	{ 0.0f, 0.0f },
-	{ 0.0f, 0.0f },
-	{ 0.0f, 0.0f },
-};
-
-/// テクスチャ座標データ:三角形x3
-const glm::vec2 tcTriangles[] = 
-{
-	{ 0.0, 0.1 },
-	{ 1.0, 0.1 },
-	{ 0.5, 0.9 },
-	{ 0.0, 0.1 },
-	{ 1.0, 0.1 },
-	{ 0.5, 0.9 },
-	{ 0.0, 0.1 },
-	{ 1.0, 0.1 },
-	{ 0.5, 0.9 },
-};
-
-/// テクスチャ座標データ:立方体
-const glm::vec2 tcCube[] =
-{
-	{ 0.0f, 0.0f}, { 0.0f, 0.0f}, { 0.0f, 0.0f}, { 0.0f, 0.0f},
-	{ 0.0f, 0.0f}, { 0.0f, 0.0f}, { 0.0f, 0.0f}, { 0.0f, 0.0f},
-};
-
-/// テクスチャ座標データ:木
-const glm::vec2 tcTree[] =
-{
-	{ 0.5f, 1.0f},
-	{ 0.0f, 0.5f},
-	{ 0.25f, 0.5f},
-	{ 0.5f, 0.5f},
-	{ 0.75f, 0.5f},
-	{ 1.0f, 0.5f},
-
-	{ 0.5f, 0.5f},
-	{ 0.0f, 0.0f},
-	{ 0.25f, 0.0f},
-	{ 0.5f, 0.0f},
-	{ 0.75f, 0.0f},
-	{ 1.0f, 0.0f},
-};
-
-/// テクスチャ座標データ:建物
-const glm::vec2 tcWarehouse[] =
-{
-	{ 0.0f, 0.0f}, { 0.25f, 0.0f}, { 0.5f, 0.0f}, { 0.75f, 0.0f}, { 1.0f, 0.0f},
-	{ 0.0f, 0.5f}, { 0.25f, 0.5f}, { 0.5f, 0.5f}, { 0.75f, 0.5f}, { 1.0f, 0.5f},
-	{ 0.25f, 1.0f}, { 0.0f, 1.0f},
-};
-
-
-
-/// インデックスデータ:四角
-const GLushort indexRectangle[] =
-{
-	0, 1, 2, 3, 4, 5,
-};
-
-/// インデックスデータ:三角形
-const GLushort indexTriangles[] =
-{
-	2, 1, 0, 5, 4, 3, 8, 7, 6,
-};
-
-/// インデックスデータ:立方体
-const GLushort indexCube[] =
-{
-	0, 1, 2, 2, 3, 0, 
-	4, 5, 1, 1, 0, 4, 
-	5, 6, 2, 2, 1, 5,
-	6, 7, 3, 3, 2, 6, 
-	7, 4, 0, 0, 3, 7, 
-	7, 6, 5, 5, 4, 7,  
-};
-
-/// インデックスデータ:木
-const GLushort indexTree[] =
-{
-	0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 1, 4, 3, 3, 2, 1,
-	6, 7, 8, 6, 8, 9, 6, 9, 10, 6, 10, 11, 7, 10, 9, 9, 8, 7,
-};
-
-/// インデックスデータ:建物
-const GLushort indexWarehouse[] =
-{
-	0, 1, 6, 6, 5, 0,
-	1, 2, 7, 7, 6, 1,
-	2, 3, 8, 8, 7, 2,
-	3, 4, 9, 9, 8, 3,
-	5, 6,10,10,11, 5,
 };
 
 //画像データ
@@ -448,11 +274,11 @@ int main()
 
 	//描画データの追加
 	primitiveBuffer.AddFromObjeFile("Res/Ground.obj");
-	primitiveBuffer.Add(std::size(posRectAngle), posRectAngle, colRectangle, tcRectangle, std::size(indexRectangle), indexRectangle);
-	primitiveBuffer.Add(std::size(posTriangles), posTriangles, colTriangles, tcTriangles, std::size(indexTriangles), indexTriangles);
-	primitiveBuffer.Add(std::size(posCube), posCube, colCube, tcCube, std::size(indexCube), indexCube);
-	primitiveBuffer.Add(std::size(posTree), posTree, colTree, tcTree, std::size(indexTree), indexTree);
-	primitiveBuffer.Add(std::size(posWarehouse), posWarehouse, colWarehouse, tcWarehouse, std::size(indexWarehouse), indexWarehouse);
+	primitiveBuffer.AddFromObjeFile("Res/Rectangle.obj");
+	primitiveBuffer.AddFromObjeFile("Res/Triangle.obj");
+	primitiveBuffer.AddFromObjeFile("Res/Cube.obj");
+	primitiveBuffer.AddFromObjeFile("Res/Tree.obj");
+	primitiveBuffer.AddFromObjeFile("Res/Warehouse.obj");
 
 	//パイプラインオブジェクトを作成する
 	const GLuint vp = GLContext::CreateProgram(GL_VERTEX_SHADER, vsCode);

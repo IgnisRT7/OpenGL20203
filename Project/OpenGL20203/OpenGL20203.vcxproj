@@ -175,6 +175,25 @@
       <FileType>Document</FileType>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Res\Rectangle.obj">
+      <FileType>Document</FileType>
+    </Text>
+    <Text Include="Res\Tree.obj">
+      <FileType>Document</FileType>
+    </Text>
+    <Text Include="Res\Triangle.obj">
+      <FileType>Document</FileType>
+    </Text>
+    <Text Include="Res\Warehouse.obj">
+      <FileType>Document</FileType>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Res\Cube.obj">
+      <FileType>Document</FileType>
+    </Text>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="packages\glfw.3.3.6\build\native\glfw.targets" Condition="Exists('packages\glfw.3.3.6\build\native\glfw.targets')" />
