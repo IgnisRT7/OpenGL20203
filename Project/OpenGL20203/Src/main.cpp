@@ -10,16 +10,6 @@
 #include <iostream>
 #pragma comment(lib,"opengl32.lib")
 
-/// 座標データ:地面
-const glm::vec3 posGround[] = 
-{
-	// 地面 0 - 3
-	{-2.0f, 0.0f, 2.0f},
-	{ 2.0f, 0.0f, 2.0f},
-	{ 2.0f, 0.0f,-2.0f},
-	{-2.0f, 0.0f,-2.0f},
-};
-
 /// 座標データ: 四角形
 const glm::vec3 posRectAngle[] =
 {	
@@ -93,7 +83,6 @@ const glm::vec3 posWarehouse[] =
 	{ 2.0f, 2.0f,-2.0f},
 };
 
-/// 色データ: 地面
 const glm::vec4 colGround[] =
 {
 	{1.0f, 1.0f, 1.0f, 1.0f},
@@ -171,14 +160,6 @@ const glm::vec4 colWarehouse[] =
 	{ 1.0f, 1.0f, 1.0f, 1.0f},
 };
 
-/// テクスチャ座標データ:地面
-const glm::vec2 tcGround[] =
-{
-	{ 0.0f, 0.0f },
-	{ 1.0f, 0.0f },
-	{ 1.0f, 1.0f },
-	{ 0.0f, 1.0f },
-};
 
 /// テクスチャ座標データ:四角形
 const glm::vec2 tcRectangle[] =
@@ -238,11 +219,7 @@ const glm::vec2 tcWarehouse[] =
 	{ 0.25f, 1.0f}, { 0.0f, 1.0f},
 };
 
-/// インデックスデータ:地面
-const GLushort indexGround[] =
-{
-	0, 1, 2, 2, 3, 0,
-};
+
 
 /// インデックスデータ:四角
 const GLushort indexRectangle[] =
@@ -470,7 +447,7 @@ int main()
 	PrimitiveBuffer primitiveBuffer(100'000, 300'000);
 
 	//描画データの追加
-	primitiveBuffer.Add(std::size(posGround), posGround, colGround, tcGround, std::size(indexGround), indexGround);
+	primitiveBuffer.AddFromObjeFile("Res/Ground.obj");
 	primitiveBuffer.Add(std::size(posRectAngle), posRectAngle, colRectangle, tcRectangle, std::size(indexRectangle), indexRectangle);
 	primitiveBuffer.Add(std::size(posTriangles), posTriangles, colTriangles, tcTriangles, std::size(indexTriangles), indexTriangles);
 	primitiveBuffer.Add(std::size(posCube), posCube, colCube, tcCube, std::size(indexCube), indexCube);

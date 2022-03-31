@@ -16,6 +16,9 @@
     <Filter Include="ソース ファイル\glad">
       <UniqueIdentifier>{a7e7465a-0443-432f-9701-105137539377}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\Images">
+      <UniqueIdentifier>{ab51ec49-77bd-4479-9044-c5a60fb6c50f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\main.cpp">
@@ -49,26 +52,31 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Res\Ground.tga">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="Res\Triangle.tga">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="Res\Tile.tga">
-      <Filter>リソース ファイル</Filter>
+    <Image Include="Res\WareHouse.tga">
+      <Filter>リソース ファイル\Images</Filter>
     </Image>
     <Image Include="Res\Green.tga">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Images</Filter>
+    </Image>
+    <Image Include="Res\Ground.tga">
+      <Filter>リソース ファイル\Images</Filter>
     </Image>
     <Image Include="Res\Road.tga">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Images</Filter>
+    </Image>
+    <Image Include="Res\Tile.tga">
+      <Filter>リソース ファイル\Images</Filter>
     </Image>
     <Image Include="Res\Tree.TGA">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Images</Filter>
     </Image>
-    <Image Include="Res\WareHouse.tga">
-      <Filter>リソース ファイル</Filter>
+    <Image Include="Res\Triangle.tga">
+      <Filter>リソース ファイル\Images</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Res\Ground.obj">
+      <Filter>リソース ファイル</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -41,6 +41,7 @@ public:
 	//プリミティブの追加
 	bool Add(size_t vertexCount, const glm::vec3* pPosition, const glm::vec4* pColor, 
 		const glm::vec2* pTexcoord, size_t indexCount, const GLushort* pIndex);
+	bool AddFromObjeFile(const char* filename);
 
 	//プリミティブの取得
 	const Primitive& Get(size_t n) const;

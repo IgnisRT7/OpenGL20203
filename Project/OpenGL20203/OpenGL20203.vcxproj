@@ -170,6 +170,11 @@
     <Image Include="Res\Triangle.tga" />
     <Image Include="Res\WareHouse.tga" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Res\Ground.obj">
+      <FileType>Document</FileType>
+    </Text>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="packages\glfw.3.3.6\build\native\glfw.targets" Condition="Exists('packages\glfw.3.3.6\build\native\glfw.targets')" />
