@@ -6,6 +6,7 @@
 #include "Primitive.h"
 #include "ProgramPipeline.h"
 #include "Texture.h"
+#include "Sampler.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 #include <string>
@@ -190,12 +191,7 @@ int main()
 	Texture texTree = Texture("Res/Tree.tga");
 	Texture texWarehouse = Texture("Res/WareHouse.tga");
 
-	//サンプラを作成
-	const GLuint sampler = GLContext::CreateSampler(GL_REPEAT);
-	if (!sampler)
-	{
-		return 1;
-	}
+	Sampler sampler = Sampler(GL_REPEAT);
 
 	//メインループ
 	while (!glfwWindowShouldClose(window))
@@ -207,7 +203,7 @@ int main()
 
 		primitiveBuffer.BindVertexArray();
 		pipeline.Bind();
-		glBindSampler(0, sampler);
+		sampler.Bind(0);
 		float s = sin(glm::radians(degree));
 		float c = cos(glm::radians(degree));
 		degree += 0.01f;
@@ -309,16 +305,13 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		glBindSampler(0, 0);
+		sampler.Unbind(0);
 		pipeline.Unbind();
 		primitiveBuffer.UnbindVertexArray();
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
-
-	//後始末
-	glDeleteSamplers(1, &sampler);
 
 	//GLFWの終了
 	glfwTerminate();
