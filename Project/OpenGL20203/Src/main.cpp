@@ -11,36 +11,6 @@
 #include <iostream>
 #pragma comment(lib,"opengl32.lib")
 
-/// 頂点シェーダー.
-static const GLchar* vsCode =
-	"#version 450 \n"
-	"layout(location=0) in vec3 vPosition; \n"
-	"layout(location=1) in vec4 vColor; \n"
-	"layout(location=2) in vec2 vTexcoord; \n"
-	"layout(location=0) out vec4 outColor; \n"
-	"layout(location=1) out vec2 outTexcoord; \n"
-	"out gl_PerVertex { \n"
-	"  vec4 gl_Position; \n"
-	"}; \n"
-	"layout(location=0) uniform mat4 matTRS; \n"
-	"void main() { \n"
-	"  outColor = vColor; \n"
-	"  outTexcoord = vTexcoord; \n"
-	"  gl_Position = matTRS * vec4(vPosition, 1.0); \n"
-	"} \n";
-
-/// フラグメントシェーダー.
-static const GLchar * fsCode =
-	"#version 450 \n"
-	"layout(location=0) in vec4 inColor; \n"
-	"layout(location=1) in vec2 inTexcoord; \n"
-	"out vec4 fragColor; \n"
-	"layout(binding=0) uniform sampler2D texColor; \n"
-	"void main() { \n"
-	"  vec4 tc = texture(texColor, inTexcoord); \n"
-	"  fragColor = inColor * tc; \n"
-	"} \n";
-
 /// マップデータ
 int mapData[10][10] =
 {
@@ -198,7 +168,7 @@ int main()
 	primitiveBuffer.AddFromObjeFile("Res/Warehouse.obj");
 
 	//パイプラインオブジェクトを作成する
-	ProgramPipeline pipeline(vsCode, fsCode);
+	ProgramPipeline pipeline("Res/Simple.vert", "Res/Simple.frag");
 	if(!pipeline.IsValid())
 	{
 		return 1;

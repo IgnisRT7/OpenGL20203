@@ -8,13 +8,13 @@
 /**
 *	コンストラクタ
 *
-*	@param	頂点シェーダプログラムのアドレス
-*	@param	フラグメントシェーダプログラムのアドレス
+*	@param	頂点シェーダファイル名
+*	@param	フラグメントシェーダファイル名
 */
 ProgramPipeline::ProgramPipeline(const char* vsCode, const char* fsCode)
 {
-	vp = GLContext::CreateProgram(GL_VERTEX_SHADER, vsCode);
-	fp = GLContext::CreateProgram(GL_FRAGMENT_SHADER, fsCode);
+	vp = GLContext::CreateProgramFromFile(GL_VERTEX_SHADER, vsCode);
+	fp = GLContext::CreateProgramFromFile(GL_FRAGMENT_SHADER, fsCode);
 	pipeline = GLContext::Createpipeline(vp, fp);
 	if (pipeline)
 	{

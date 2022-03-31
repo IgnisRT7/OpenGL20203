@@ -162,6 +162,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Res\Simple.frag" />
+    <None Include="Res\Simple.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\Green.tga" />

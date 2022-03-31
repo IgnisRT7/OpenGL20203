@@ -7,6 +7,7 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
+#include <sstream>
 
 /**
 *	OpenGLコンテキストに関する機能を格納する名前空間
@@ -112,6 +113,29 @@ namespace GLContext
 			return 0;
 		}
 		return program;
+	}
+
+	/**
+	*	ファイルからシェーダープログラムを作成する
+	*
+	*	@param type		シェーダの種類
+	*	@param filename	シェーダーファイル名
+	*
+	*	@retval 0より大きい	作成したプログラムオブジェクト
+	*	@retval 0			プログラムオブジェクトの作成に失敗
+	*/
+	GLuint CreateProgramFromFile(GLenum type, const char* filename)
+	{
+		std::ifstream ifs(filename);
+		if (!ifs)
+		{
+			std::cerr << "[エラー]" << __func__ << ":" << filename <<
+				"を開けません.\n";
+			return 0;
+		}
+		std::stringstream ss;
+		ss << ifs.rdbuf();
+		return GLContext::CreateProgram(type, ss.str().c_str());
 	}
 
 	/**
