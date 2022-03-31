@@ -19,6 +19,9 @@
     <Filter Include="リソース ファイル\Images">
       <UniqueIdentifier>{ab51ec49-77bd-4479-9044-c5a60fb6c50f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\Objects">
+      <UniqueIdentifier>{01da497e-a854-4d75-9137-a8474cfd4550}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\main.cpp">
@@ -75,23 +78,23 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Res\Ground.obj">
-      <Filter>リソース ファイル</Filter>
+    <Text Include="Res\Cube.obj">
+      <Filter>リソース ファイル\Objects</Filter>
     </Text>
-    <Text Include="Res\Warehouse.obj">
-      <Filter>リソース ファイル</Filter>
+    <Text Include="Res\Ground.obj">
+      <Filter>リソース ファイル\Objects</Filter>
     </Text>
     <Text Include="Res\Rectangle.obj">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Objects</Filter>
     </Text>
     <Text Include="Res\Tree.obj">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Objects</Filter>
     </Text>
     <Text Include="Res\Triangle.obj">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Objects</Filter>
     </Text>
-    <Text Include="Res\Cube.obj">
-      <Filter>リソース ファイル</Filter>
+    <Text Include="Res\Warehouse.obj">
+      <Filter>リソース ファイル\Objects</Filter>
     </Text>
   </ItemGroup>
 </Project>
