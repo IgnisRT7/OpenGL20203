@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include "GLContext.h"
 #include "Primitive.h"
+#include "ProgramPipeline.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 #include <string>
@@ -197,10 +198,8 @@ int main()
 	primitiveBuffer.AddFromObjeFile("Res/Warehouse.obj");
 
 	//パイプラインオブジェクトを作成する
-	const GLuint vp = GLContext::CreateProgram(GL_VERTEX_SHADER, vsCode);
-	const GLuint fp = GLContext::CreateProgram(GL_FRAGMENT_SHADER, fsCode);
-	const GLuint pipeline = GLContext::Createpipeline(vp, fp);
-	if (!pipeline)
+	ProgramPipeline pipeline(vsCode, fsCode);
+	if(!pipeline.IsValid())
 	{
 		return 1;
 	}
@@ -239,7 +238,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		primitiveBuffer.BindVertexArray();
-		glBindProgramPipeline(pipeline);
+		pipeline.Bind();
 		glBindSampler(0, sampler);
 		float s = sin(glm::radians(degree));
 		float c = cos(glm::radians(degree));
@@ -267,7 +266,7 @@ int main()
 		// 行列をシェーダに転送する
 		const glm::mat4 matModel = glm::mat4(1);
 		const glm::mat4 matMVP = matProj * matView * matModel;
-		glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matMVP[0][0]);
+		pipeline.SetUniform(locMatTRS, matMVP);
 
 		// 立方体の描画
 		glBindTextureUnit(0, texTriangle);
@@ -308,7 +307,7 @@ int main()
 				// 行列をシェーダに転送する 
 				const glm::mat4 matModel = glm::translate(glm::mat4(1), position);
 				const glm::mat4 matMVP = matProj * matView * matModel;
-				glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matMVP[0][0]);
+				pipeline.SetUniform(locMatTRS, matMVP);
 				
 				glBindTextureUnit(0, p.tex); // テクスチャを割り当てる.
 				p.prim.Draw();
@@ -327,7 +326,7 @@ int main()
 				//行列をシェーダに転送する
 				const glm::mat4 matModel = glm::translate(glm::mat4(1), position);
 				const glm::mat4 matMVP = matProj * matView * matModel;
-				glProgramUniformMatrix4fv(vp, locMatTRS, 1, GL_FALSE, &matMVP[0][0]);
+				pipeline.SetUniform(locMatTRS, matMVP);
 
 				const int textureNo = mapData[y][x];
 				glBindTextureUnit(0, mapTexList[textureNo]);
@@ -340,7 +339,7 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		glBindSampler(0, 0);
-		glBindProgramPipeline(0);
+		pipeline.Unbind();
 		primitiveBuffer.UnbindVertexArray();
 
 		glfwPollEvents();
@@ -351,9 +350,6 @@ int main()
 	glDeleteSamplers(1, &sampler);
 	glDeleteTextures(1, &texGround);
 	glDeleteTextures(1, &texTriangle);
-	glDeleteProgramPipelines(1, &pipeline);
-	glDeleteProgram(fp);
-	glDeleteProgram(vp);
 
 	//GLFWの終了
 	glfwTerminate();
