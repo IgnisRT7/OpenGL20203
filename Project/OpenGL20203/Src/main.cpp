@@ -298,61 +298,6 @@ const GLuint R = 0xff'10'10'e0; // 赤
 const GLuint B = 0xff'e0'10'10; // 青
 const GLuint G = 0xff'22'B1'4C; // 緑
 
-//地面用画像
-const int imageGroundWidth = 8; // 画面の幅
-const int imageGroundHeight = 8; // 画面の高さ
-const GLuint imageGround[imageGroundWidth * imageGroundHeight] =
-{
-	X, B, B, B, X, W, W, W,
-	X, B, B, B, X, W, W, W,
-	X, B, B, B, X, W, W, W,
-	X, X, X, X, X, X, X, X,
-	W, W, X, R, R, R, X, W,
-	W, W, X, R, R, R, X, W,
-	W, W, X, R, R, R, X, W,
-	X, X, X, X, X, X, X, X,
-};
-//三角形用画像
-const int imageTriangleWidth = 6;
-const int imageTriangleHeight = 6;
-const GLuint imageTriangle[imageTriangleWidth * imageTriangleHeight] = 
-{
-	W, X, W, X, W, X,
-	W, X, W, X, W, X,
-	W, X, W, X, W, X,
-	W, X, W, X, W, X,
-	W, X, W, X, W, X,
-	W, X, W, X, W, X,
-};
-//緑地用画像
-const int imageGreenWidth = 8;
-const int imageGreenHeight = 8;
-const GLuint imageGreen[imageGreenWidth * imageGreenHeight] =
-{
-	G, G, G, G, G, G, G, G,
-	G, G, G, G, G, G, G, G,
-	G, G, G, G, G, G, G, G, 
-	G, G, G, G, G, G, G, G, 
-	G, G, G, G, G, G, G, G,
-	G, G, G, G, G, G, G, G,
-	G, G, G, G, G, G, G, G,
-	G, G, G, G, G, G, G, G,
-};
-//道用画像
-const int imageRoadWidth = 8;
-const int imageRoadHeight = 8;
-const GLuint imageRoad[imageRoadWidth * imageRoadHeight] =
-{
-	W, W, W, W, W, W, W, W,
-	X, X, X, X, X, X, X, X,
-	X, X, X, X, X, X, X, X,
-	X, W, W, W, W, X, X, X,
-	X, W, W, W, W, X, X, X,
-	X, X, X, X, X, X, X, X,
-	X, X, X, X, X, X, X, X,
-	W, W, W, W, W, W, W, W,
-};
-
 /// 頂点シェーダー.
 static const GLchar* vsCode =
 	"#version 450 \n"
