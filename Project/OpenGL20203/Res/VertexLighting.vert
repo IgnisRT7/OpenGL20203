@@ -30,18 +30,26 @@ DirectionalLight light =
 	{ 1.81,  1.16,  0.32 },
 };
 
+// 環境光
+vec3 ambientLight = { 0.15, 0.10, 0.20 };
+
 // 頂点シェーダプログラム
 void main() 
 { 
 	// 回転行列を取り出す
 	mat3 matNormal = transpose(inverse(mat3(matModel)));
 	
-	// ワールド座標系の方栓を計算
+	// ワールド座標系の法線を計算
 	vec3 worldNormal = normalize(matNormal * vNormal);
+
+	// 環境光の設定 
+	vec3 lightColor = ambientLight;
 
 	//ランパート反射による明るさを計算
 	float cosTheta = max(dot(worldNormal, -light.direction), 0);
-	vec3 lightColor = light.color * cosTheta;
+	lightColor += light.color * cosTheta;
+
+	// 物体の色とライトの色を乗算
 	outColor.rgb = vColor.rgb * lightColor;
 
 	// 不透明度は物体の値をそのまま使う

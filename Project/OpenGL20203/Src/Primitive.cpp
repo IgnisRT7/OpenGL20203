@@ -356,11 +356,30 @@ bool PrimitiveBuffer::AddFromObjeFile(const char* filename)
 			texcoords.push_back(glm::vec2(0));
 		}
 
-		// 法線インデックスが無いデータの場合、適当な法線を用意する
+		// 法線データが無いの場合、適当な法線を用意する
 		if (objIndices[i].vn == 0)
 		{
-			//適当な法線データを追加
-			const glm::vec3 normal = glm::vec3(0, 1, 0);
+			// 面の頂点座標を配列pに取得
+			glm::vec3 p[3];
+			const size_t n = (i / 3);
+			for (size_t j = 0; j < 3; ++j)
+			{
+				const int v = objIndices[n * 3 + j].v - 1;
+				p[j] = objPositions[v];
+			}
+			// ３点からなる2辺を計算
+			const glm::vec3 a = p[1] - p[0];
+			const glm::vec3 b = p[2] - p[1];
+
+			// aとbに垂直なベクトルを計算
+			glm::vec3 normal = glm::cross(a, b);
+
+			// 垂直ベクトルの長さを計算
+			const float length = sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
+
+			// 垂直ベクトルを単位ベクトルに変換
+			normal = normal /length;
+
 			normals.push_back(normal);
 		}
 		else
