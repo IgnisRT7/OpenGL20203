@@ -40,9 +40,9 @@ namespace GLContext
 	*
 	*	@return 作成したVAO
 	*/
-	GLuint CreateVertexArray(GLuint vboPosition, GLuint vboColor, GLuint vboTexcoord, GLuint ibo)
+	GLuint CreateVertexArray(GLuint vboPosition, GLuint vboColor, GLuint vboTexcoord, GLuint vboNormal, GLuint ibo)
 	{
-		if (!vboPosition || !vboColor || !vboTexcoord || !ibo)
+		if (!vboPosition || !vboColor || !vboTexcoord || !vboNormal || !ibo)
 		{
 			std::cerr << "[エラー]" << __func__ << ":バッファオブジェクトが0です。\n";
 			return 0;
@@ -74,6 +74,14 @@ namespace GLContext
 		glVertexArrayAttribFormat(id, texcoordIndex, 2, GL_FLOAT, GL_FALSE, 0);
 		glVertexArrayAttribBinding(id, texcoordIndex, texcoordBindingIndex);
 		glVertexArrayVertexBuffer(id, texcoordBindingIndex, vboTexcoord, 0, sizeof(glm::vec2));
+
+		// 法線データをバインディングポイントに割り当てる
+		const GLuint normalIndex = 3;
+		const GLuint normalBindingIndex = 3;
+		glEnableVertexArrayAttrib(id, normalIndex);
+		glVertexArrayAttribFormat(id, normalIndex, 3, GL_FLOAT, GL_FALSE, 0);
+		glVertexArrayAttribBinding(id, normalIndex, normalBindingIndex);
+		glVertexArrayVertexBuffer(id, normalBindingIndex, vboNormal, 0, sizeof(glm::vec3));
 
 		glVertexArrayElementBuffer(id, ibo);
 		return id;

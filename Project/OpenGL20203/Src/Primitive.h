@@ -40,7 +40,7 @@ public:
 
 	//プリミティブの追加
 	bool Add(size_t vertexCount, const glm::vec3* pPosition, const glm::vec4* pColor, 
-		const glm::vec2* pTexcoord, size_t indexCount, const GLushort* pIndex);
+		const glm::vec2* pTexcoord, const glm::vec3* pNormal, size_t indexCount, const GLushort* pIndex);
 	bool AddFromObjeFile(const char* filename);
 
 	//プリミティブの取得
@@ -57,6 +57,7 @@ private:
 	GLuint vboPosition = 0;
 	GLuint vboColor = 0;
 	GLuint vboTexcoord = 0;
+	GLuint vboNormal = 0;
 	GLuint ibo = 0;
 	GLuint vao = 0;
 
