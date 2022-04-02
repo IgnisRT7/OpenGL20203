@@ -173,7 +173,7 @@ int main()
 	primitiveBuffer.AddFromObjeFile("Res/T34.obj");
 
 	//パイプラインオブジェクトを作成する
-	ProgramPipeline pipeline("Res/VertexLighting.vert", "Res/Simple.frag");
+	ProgramPipeline pipeline("Res/FragmentLighting.vert", "Res/FragmentLighting.frag");
 	if(!pipeline.IsValid())
 	{
 		return 1;

@@ -83,10 +83,10 @@
     <None Include="Res\VertexLighting.vert">
       <Filter>リソース ファイル\Shader</Filter>
     </None>
-    <None Include="FragmentLighting.vert">
+    <None Include="Res\FragmentLighting.frag">
       <Filter>リソース ファイル\Shader</Filter>
     </None>
-    <None Include="FragmentLighting.frag">
+    <None Include="Res\FragmentLighting.vert">
       <Filter>リソース ファイル\Shader</Filter>
     </None>
   </ItemGroup>
