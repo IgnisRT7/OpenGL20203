@@ -198,9 +198,29 @@ int main()
 
 	std::shared_ptr<Sampler> sampler(new Sampler(GL_REPEAT));
 
+	glm::vec3 posTank(0, 0, 0); //戦車の位置
+
 	//メインループ
 	while (!glfwWindowShouldClose(window))
 	{
+		// 戦車を移動させる
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		{
+			posTank.x -= 0.01f;
+		}
+		else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		{
+			posTank.x += 0.01f;
+		}
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		{
+			posTank.z -= 0.01f;
+		}
+		else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		{
+			posTank.z += 0.01f;
+		}
+
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glClearColor(0.1f, 0.3f, 0.5f, 1.0f);
@@ -245,7 +265,7 @@ int main()
 
 		//戦車を表示
 		{
-			const glm::mat4 matModel = glm::translate(glm::mat4(1), glm::vec3(0, 0, 5));
+			const glm::mat4 matModel = glm::translate(glm::mat4(1), posTank);
 			const glm::mat4 matMVP = matProj * matView * matModel;
 			pipeline.SetUniform(locMatTRS, matMVP);
 			pipeline.SetUniform(locMatModel, matModel);
