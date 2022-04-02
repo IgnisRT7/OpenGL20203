@@ -171,6 +171,7 @@ int main()
 	primitiveBuffer.AddFromObjeFile("Res/Warehouse.obj");
 	primitiveBuffer.AddFromObjeFile("Res/Tiger_I.obj");
 	primitiveBuffer.AddFromObjeFile("Res/T34.obj");
+	primitiveBuffer.AddFromObjeFile("Res/HouseRender.obj");
 
 	//パイプラインオブジェクトを作成する
 	ProgramPipeline pipeline("Res/FragmentLighting.vert", "Res/FragmentLighting.frag");
@@ -195,6 +196,7 @@ int main()
 	std::shared_ptr<Texture> texWarehouse(new Texture("Res/WareHouse.tga"));
 	std::shared_ptr<Texture> texTank(new Texture("Res/PzVl_Tiger_I.tga"));
 	std::shared_ptr<Texture> texTank2(new Texture("Res/T-34.tga"));
+	std::shared_ptr<Texture> texBrickHouse(new Texture("Res/House38UVTexture.tga"));
 
 	std::shared_ptr<Sampler> sampler(new Sampler(GL_REPEAT));
 
@@ -320,6 +322,17 @@ int main()
 
 			texTank2->Bind(0);
 			primitiveBuffer.Get(7).Draw();
+		}
+
+		//建物を表示
+		{
+			const glm::mat4 matModel = glm::translate(glm::mat4(1), glm::vec3(-8, 2, 0));
+			const glm::mat4 matMVP = matProj * matView * matModel;
+			pipeline.SetUniform(locMatTRS, matMVP);
+			pipeline.SetUniform(locMatModel, matModel);
+
+			texBrickHouse->Bind(0);
+			primitiveBuffer.Get(8).Draw();
 		}
 
 		// マップに配置する物体の表示データ
