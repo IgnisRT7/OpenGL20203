@@ -147,12 +147,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Res\Sampler.cpp" />
     <ClCompile Include="Src\glad\src\glad.c" />
     <ClCompile Include="Src\GLContext.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\Primitive.cpp" />
     <ClCompile Include="Src\ProgramPipeline.cpp" />
+    <ClCompile Include="Src\Sampler.cpp" />
     <ClCompile Include="Src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +173,7 @@
   <ItemGroup>
     <Image Include="Res\Green.tga" />
     <Image Include="Res\Ground.tga" />
+    <Image Include="Res\PzVl_Tiger_I.tga" />
     <Image Include="Res\Road.tga" />
     <Image Include="Res\Tile.tga" />
     <Image Include="Res\Tree.TGA" />
@@ -200,6 +201,11 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Res\Cube.obj">
+      <FileType>Document</FileType>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Res\Tiger_I.obj">
       <FileType>Document</FileType>
     </Text>
   </ItemGroup>

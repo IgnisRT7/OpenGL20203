@@ -45,7 +45,7 @@
     <ClCompile Include="Src\Texture.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Res\Sampler.cpp">
+    <ClCompile Include="Src\Sampler.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -69,7 +69,7 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Res\Sampler.h">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +106,9 @@
     <Image Include="Res\Triangle.tga">
       <Filter>リソース ファイル\Images</Filter>
     </Image>
+    <Image Include="Res\PzVl_Tiger_I.tga">
+      <Filter>リソース ファイル\Images</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Res\Cube.obj">
@@ -124,6 +127,9 @@
       <Filter>リソース ファイル\Objects</Filter>
     </Text>
     <Text Include="Res\Warehouse.obj">
+      <Filter>リソース ファイル\Objects</Filter>
+    </Text>
+    <Text Include="Res\Tiger_I.obj">
       <Filter>リソース ファイル\Objects</Filter>
     </Text>
   </ItemGroup>

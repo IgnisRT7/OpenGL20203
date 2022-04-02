@@ -11,6 +11,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include <iostream>
+#include <memory>
 #pragma comment(lib,"opengl32.lib")
 
 /// マップデータ
@@ -168,6 +169,7 @@ int main()
 	primitiveBuffer.AddFromObjeFile("Res/Cube.obj");
 	primitiveBuffer.AddFromObjeFile("Res/Tree.obj");
 	primitiveBuffer.AddFromObjeFile("Res/Warehouse.obj");
+	primitiveBuffer.AddFromObjeFile("Res/Tiger_I.obj");
 
 	//パイプラインオブジェクトを作成する
 	ProgramPipeline pipeline("Res/VertexLighting.vert", "Res/Simple.frag");
@@ -184,14 +186,15 @@ int main()
 	float degree = 0;
 
 	//テクスチャ作成
-	Texture texGround = Texture("Res/Tile.tga");
-	Texture texTriangle = Texture("Res/Triangle.tga");
-	Texture texGreen = Texture("Res/Green.tga");
-	Texture texRoad = Texture("Res/Road.tga");
-	Texture texTree = Texture("Res/Tree.tga");
-	Texture texWarehouse = Texture("Res/WareHouse.tga");
+	std::shared_ptr<Texture> texGround(new Texture("Res/Tile.tga"));
+	std::shared_ptr<Texture> texTriangle(new Texture("Res/Triangle.tga"));
+	std::shared_ptr<Texture> texGreen(new Texture("Res/Green.tga"));
+	std::shared_ptr<Texture> texRoad(new Texture("Res/Road.tga"));
+	std::shared_ptr<Texture> texTree(new Texture("Res/Tree.tga"));
+	std::shared_ptr<Texture> texWarehouse(new Texture("Res/WareHouse.tga"));
+	std::shared_ptr<Texture> texTank(new Texture("Res/PzVl_Tiger_I.tga"));
 
-	Sampler sampler = Sampler(GL_REPEAT);
+	std::shared_ptr<Sampler> sampler(new Sampler(GL_REPEAT));
 
 	//メインループ
 	while (!glfwWindowShouldClose(window))
@@ -203,7 +206,7 @@ int main()
 
 		primitiveBuffer.BindVertexArray();
 		pipeline.Bind();
-		sampler.Bind(0);
+		sampler->Bind(0);
 		float s = sin(glm::radians(degree));
 		float c = cos(glm::radians(degree));
 		degree += 0.01f;
@@ -234,23 +237,26 @@ int main()
 		pipeline.SetUniform(locMatModel, matModel);
 
 		// 三角形と立方体の描画
-		texTriangle.Bind(0);
+		texTriangle->Bind(0);
 		primitiveBuffer.Get(2).Draw();
 		primitiveBuffer.Get(3).Draw();
+
+		texTank->Bind(0);
+		primitiveBuffer.Get(6).Draw();
 
 		// マップに配置する物体の表示データ
 		struct ObjectData
 		{
 			Primitive prim; //表示するプリミティブ
-			const Texture* tex; //プリミティブに貼るテクスチャ
+			const std::shared_ptr<Texture> tex; //プリミティブに貼るテクスチャ
 		};
 
 		//描画する物体のリスト
 		const ObjectData objectList[] =
 		{
 			{ Primitive(), 0}, // なし
-			{ primitiveBuffer.Get(4), &texTree}, // 木
-			{ primitiveBuffer.Get(5), &texWarehouse}, //家
+			{ primitiveBuffer.Get(4), texTree}, // 木
+			{ primitiveBuffer.Get(5), texWarehouse}, //家
 		};
 
 		//木を植える
@@ -281,7 +287,7 @@ int main()
 		}
 
 		//マップを(-20-20)-(20,20)の範囲に描画
-		const Texture* mapTexList[] = { &texGreen, &texGround, &texRoad };
+		const std::shared_ptr<Texture> mapTexList[] = { texGreen, texGround, texRoad };
 		for (int y = 0; y < 10; ++y)
 		{
 			for (int x = 0; x < 10; ++x)
@@ -305,7 +311,7 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		sampler.Unbind(0);
+		sampler->Unbind(0);
 		pipeline.Unbind();
 		primitiveBuffer.UnbindVertexArray();
 
