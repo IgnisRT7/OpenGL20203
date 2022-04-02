@@ -201,25 +201,51 @@ int main()
 	glm::vec3 posTank(0, 0, 0); //戦車の位置
 
 	//メインループ
+	double loopTime = glfwGetTime(); // 1/60秒間隔でループ処理するための時刻変数
+	double diffLoopTime = 0; // 自国の差分
+	const float deltaTime = 1.0f / 60.0f; // 更新間隔
+
 	while (!glfwWindowShouldClose(window))
 	{
-		// 戦車を移動させる
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		// 現在時刻を取得
+		const double curLoopTime = glfwGetTime();
+		// 現在時刻と前回自国の差を、自国の差分に加算
+		diffLoopTime += curLoopTime - loopTime;
+		// 前回自国を現在時刻に更新
+		loopTime = curLoopTime;
+		// 時刻の差分が1/60秒未満なら、ループの先頭に戻る
+		if (diffLoopTime < deltaTime)
 		{
-			posTank.x -= 0.01f;
+			continue;
 		}
-		else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+
+		//
+		// ゲーム状態を更新する
+		//
+		for (; diffLoopTime >= deltaTime; diffLoopTime -= deltaTime)
 		{
-			posTank.x += 0.01f;
+			// 戦車を移動させる
+			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			{
+				posTank.x -= 1.0f / 60.0f * 4;
+			}
+			else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			{
+				posTank.x += 1.0f / 60.0f * 4;
+			}
+			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			{
+				posTank.z -= 1.0f / 60.0f * 4;
+			}
+			else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			{
+				posTank.z += 1.0f / 60.0f * 4;
+			}
 		}
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		{
-			posTank.z -= 0.01f;
-		}
-		else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		{
-			posTank.z += 0.01f;
-		}
+
+		//
+		// ゲーム状態を描画する
+		//
 
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
