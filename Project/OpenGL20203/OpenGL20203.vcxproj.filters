@@ -83,6 +83,12 @@
     <None Include="Res\VertexLighting.vert">
       <Filter>リソース ファイル\Shader</Filter>
     </None>
+    <None Include="FragmentLighting.vert">
+      <Filter>リソース ファイル\Shader</Filter>
+    </None>
+    <None Include="FragmentLighting.frag">
+      <Filter>リソース ファイル\Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\WareHouse.tga">

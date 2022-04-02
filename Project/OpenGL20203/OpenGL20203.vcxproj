@@ -165,6 +165,8 @@
     <ClInclude Include="Src\Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="FragmentLighting.frag" />
+    <None Include="FragmentLighting.vert" />
     <None Include="packages.config" />
     <None Include="Res\Simple.frag" />
     <None Include="Res\Simple.vert" />
