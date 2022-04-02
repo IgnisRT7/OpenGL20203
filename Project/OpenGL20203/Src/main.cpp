@@ -170,6 +170,7 @@ int main()
 	primitiveBuffer.AddFromObjeFile("Res/Tree.obj");
 	primitiveBuffer.AddFromObjeFile("Res/Warehouse.obj");
 	primitiveBuffer.AddFromObjeFile("Res/Tiger_I.obj");
+	primitiveBuffer.AddFromObjeFile("Res/T34.obj");
 
 	//パイプラインオブジェクトを作成する
 	ProgramPipeline pipeline("Res/VertexLighting.vert", "Res/Simple.frag");
@@ -193,6 +194,7 @@ int main()
 	std::shared_ptr<Texture> texTree(new Texture("Res/Tree.tga"));
 	std::shared_ptr<Texture> texWarehouse(new Texture("Res/WareHouse.tga"));
 	std::shared_ptr<Texture> texTank(new Texture("Res/PzVl_Tiger_I.tga"));
+	std::shared_ptr<Texture> texTank2(new Texture("Res/T-34.tga"));
 
 	std::shared_ptr<Sampler> sampler(new Sampler(GL_REPEAT));
 
@@ -241,8 +243,27 @@ int main()
 		primitiveBuffer.Get(2).Draw();
 		primitiveBuffer.Get(3).Draw();
 
-		texTank->Bind(0);
-		primitiveBuffer.Get(6).Draw();
+		//戦車を表示
+		{
+			const glm::mat4 matModel = glm::translate(glm::mat4(1), glm::vec3(0, 0, 5));
+			const glm::mat4 matMVP = matProj * matView * matModel;
+			pipeline.SetUniform(locMatTRS, matMVP);
+			pipeline.SetUniform(locMatModel, matModel);
+
+			texTank->Bind(0);
+			primitiveBuffer.Get(6).Draw();
+		}
+		
+		//戦車2を表示
+		{
+			const glm::mat4 matModel = glm::translate(glm::mat4(1), glm::vec3(-5, 0, 0));
+			const glm::mat4 matMVP = matProj * matView * matModel;
+			pipeline.SetUniform(locMatTRS, matMVP);
+			pipeline.SetUniform(locMatModel, matModel);
+
+			texTank2->Bind(0);
+			primitiveBuffer.Get(7).Draw();
+		}
 
 		// マップに配置する物体の表示データ
 		struct ObjectData
