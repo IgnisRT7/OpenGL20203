@@ -109,6 +109,9 @@
     <Image Include="Res\PzVl_Tiger_I.tga">
       <Filter>リソース ファイル\Images</Filter>
     </Image>
+    <Image Include="Res\T-34.tga">
+      <Filter>リソース ファイル\Images</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Res\Cube.obj">
@@ -130,6 +133,9 @@
       <Filter>リソース ファイル\Objects</Filter>
     </Text>
     <Text Include="Res\Tiger_I.obj">
+      <Filter>リソース ファイル\Objects</Filter>
+    </Text>
+    <Text Include="Res\T34.obj">
       <Filter>リソース ファイル\Objects</Filter>
     </Text>
   </ItemGroup>

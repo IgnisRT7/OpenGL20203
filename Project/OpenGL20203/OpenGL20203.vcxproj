@@ -175,6 +175,7 @@
     <Image Include="Res\Ground.tga" />
     <Image Include="Res\PzVl_Tiger_I.tga" />
     <Image Include="Res\Road.tga" />
+    <Image Include="Res\T-34.tga" />
     <Image Include="Res\Tile.tga" />
     <Image Include="Res\Tree.TGA" />
     <Image Include="Res\Triangle.tga" />
@@ -206,6 +207,11 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Res\Tiger_I.obj">
+      <FileType>Document</FileType>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Res\T34.obj">
       <FileType>Document</FileType>
     </Text>
   </ItemGroup>
