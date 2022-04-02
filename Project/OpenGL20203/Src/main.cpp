@@ -34,9 +34,9 @@ int objectMapData[10][10] =
 	{ 0, 0, 0, 1, 0, 0, 1, 0, 0, 0},
 	{ 0, 0, 0, 1, 0, 0, 1, 0, 0, 0},
 	{ 0, 0, 0, 0, 0, 0, 0, 2, 0, 0},
-	{ 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
-	{ 0, 0, 0, 0, 0, 0, 0, 2, 0, 0},
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{ 0, 0, 0, 0, 0, 0, 0, 2, 0, 0},
+	{ 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
 	{ 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	{ 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
@@ -289,7 +289,7 @@ int main()
 		const glm::mat4 matProj = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 200.0f);
 
 		// ビュー行列を作成
-		const glm::mat4 matView = glm::lookAt(glm::vec3(0, 20, 20), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+		const glm::mat4 matView = glm::lookAt(glm::vec3(0, 30, 20), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
 		// 行列をシェーダに転送する
 		const glm::mat4 matModel = glm::mat4(1);
@@ -338,6 +338,19 @@ int main()
 
 			texBrickHouse->Bind(0);
 			primitiveBuffer.Get(8).Draw();
+		}
+
+		//もう一つの建物を表示
+		{
+			const glm::mat4 matModel =
+				glm::translate(glm::mat4(1), glm::vec3(-13.0f, 0, -5.0f)) * 
+				glm::scale(glm::mat4(1), glm::vec3(0.03f, 0.03f, 0.03f));
+			const glm::mat4 matMVP = matProj * matView * matModel;
+			pipeline.SetUniform(locMatTRS, matMVP);
+			pipeline.SetUniform(locMatModel, matModel);
+
+			texTeraHouse->Bind(0);
+			primitiveBuffer.Get(9).Draw();
 		}
 
 		// マップに配置する物体の表示データ
