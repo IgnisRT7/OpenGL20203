@@ -199,6 +199,7 @@ int main()
 	std::shared_ptr<Sampler> sampler(new Sampler(GL_REPEAT));
 
 	glm::vec3 posTank(0, 0, 0); //戦車の位置
+	float rotTank = 0; // 戦車の向き
 
 	//メインループ
 	double loopTime = glfwGetTime(); // 1/60秒間隔でループ処理するための時刻変数
@@ -227,19 +228,27 @@ int main()
 			// 戦車を移動させる
 			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 			{
-				posTank.x -= 1.0f / 60.0f * 4;
+				rotTank += glm::radians(90.0f) * deltaTime;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 			{
-				posTank.x += 1.0f / 60.0f * 4;
+				rotTank -= glm::radians(90.0f) * deltaTime;
 			}
+
+			// rotTankが0のときの戦車の向きベクトル
+			glm::vec3 tankFront(0, 0, 1);
+			// rotTankラジアンだけ回転させる回転行列を作る
+			const glm::mat4 matRot = glm::rotate(glm::mat4(1), rotTank, glm::vec3(0, 1, 0));
+			// 向きベクトルをrotTankだけ回転させる
+			tankFront = matRot * glm::vec4(tankFront, 1);
+
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			{
-				posTank.z -= 1.0f / 60.0f * 4;
+				posTank += tankFront * 4.0f * deltaTime;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 			{
-				posTank.z += 1.0f / 60.0f * 4;
+				posTank -= tankFront * 4.0f * deltaTime;
 			}
 		}
 
@@ -291,7 +300,9 @@ int main()
 
 		//戦車を表示
 		{
-			const glm::mat4 matModel = glm::translate(glm::mat4(1), posTank);
+			const glm::mat4 matModel =
+				glm::translate(glm::mat4(1), posTank) *
+				glm::rotate(glm::mat4(1), rotTank, glm::vec3(0, 1, 0));
 			const glm::mat4 matMVP = matProj * matView * matModel;
 			pipeline.SetUniform(locMatTRS, matMVP);
 			pipeline.SetUniform(locMatModel, matModel);
