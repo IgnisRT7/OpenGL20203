@@ -172,6 +172,7 @@ int main()
 	primitiveBuffer.AddFromObjeFile("Res/Tiger_I.obj");
 	primitiveBuffer.AddFromObjeFile("Res/T34.obj");
 	primitiveBuffer.AddFromObjeFile("Res/HouseRender.obj");
+	primitiveBuffer.AddFromObjeFile("Res/deneme.obj");
 
 	//パイプラインオブジェクトを作成する
 	ProgramPipeline pipeline("Res/FragmentLighting.vert", "Res/FragmentLighting.frag");
@@ -197,6 +198,7 @@ int main()
 	std::shared_ptr<Texture> texTank(new Texture("Res/PzVl_Tiger_I.tga"));
 	std::shared_ptr<Texture> texTank2(new Texture("Res/T-34.tga"));
 	std::shared_ptr<Texture> texBrickHouse(new Texture("Res/House38UVTexture.tga"));
+	std::shared_ptr<Texture> texTeraHouse(new Texture("Res/deneme_wire_143224087_BaseColor.tga"));
 
 	std::shared_ptr<Sampler> sampler(new Sampler(GL_REPEAT));
 
@@ -326,7 +328,10 @@ int main()
 
 		//建物を表示
 		{
-			const glm::mat4 matModel = glm::translate(glm::mat4(1), glm::vec3(-8, 2, 0));
+			const glm::mat4 matModel = 
+				glm::translate(glm::mat4(1), glm::vec3(10.5f, 0, 0)) *
+				glm::scale(glm::mat4(1), glm::vec3(4, 4, 4)) * 
+				glm::translate(glm::mat4(1), glm::vec3(-2.6f, 2.0f, 1.5f));
 			const glm::mat4 matMVP = matProj * matView * matModel;
 			pipeline.SetUniform(locMatTRS, matMVP);
 			pipeline.SetUniform(locMatModel, matModel);

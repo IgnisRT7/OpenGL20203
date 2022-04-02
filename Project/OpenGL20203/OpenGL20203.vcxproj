@@ -175,6 +175,7 @@
   <ItemGroup>
     <Image Include="Res\Green.tga" />
     <Image Include="Res\Ground.tga" />
+    <Image Include="Res\House38UVTexture.tga" />
     <Image Include="Res\PzVl_Tiger_I.tga" />
     <Image Include="Res\Road.tga" />
     <Image Include="Res\T-34.tga" />
@@ -214,6 +215,11 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Res\T34.obj">
+      <FileType>Document</FileType>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Res\HouseRender.obj">
       <FileType>Document</FileType>
     </Text>
   </ItemGroup>

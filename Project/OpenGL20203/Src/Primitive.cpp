@@ -267,38 +267,43 @@ bool PrimitiveBuffer::AddFromObjeFile(const char* filename)
 		}
 		else if (type == "f") //面
 		{
-			Index f[3];
-			bool isSuccess = false; // 解析判定用
-
-			//頂点・テクスチャ座標のみ
-			if(sscanf(p, "%d/%d %d/%d %d/%d",
-				&f[0].v, &f[0].vt,
-				&f[1].v, &f[1].vt,
-				&f[2].v, &f[2].vt) == 6)
+			std::vector<Index> f; // 面の頂点データの配列
+			for (size_t i = 0; ; ++i)
 			{
-				isSuccess = true;
+				int readBytes = 0; // 読み込んだ文字数
+				Index tmp;
+				// 「頂点座標/テクスチャ座標/法線」バージョンの解析
+				if (sscanf(p, " %d/%d/%d %n", &tmp.v, &tmp.vt, &tmp.vn, &readBytes) == 3)
+				{
+					f.push_back(tmp);
+					p += readBytes;
+				}
+				// 「頂点座標/テクスチャ座標」バージョンの解析
+				else if (sscanf(p, "%d/%d %n", &tmp.v, &tmp.vt, &readBytes) == 2)
+				{
+					f.push_back(tmp);
+					p += readBytes;
+				}
+				else
+				{
+					break; // 読み込み完了
+				}
 			}
 
-			//頂点・テクスチャ座標・法線用
-			if (sscanf(p, "%d/%d/%d %d/%d/%d %d/%d/%d",
-				&f[0].v, &f[0].vt, &f[0].vn,
-				&f[1].v, &f[1].vt, &f[1].vn,
-				&f[2].v, &f[2].vt, &f[2].vn) == 9)
-			{
-				isSuccess = true;
-			}
 
-			if(!isSuccess)
+			if(f.size() >= 3)
 			{
-				std::cerr << "[警告]" << __func__ << ":面データの読み取りに失敗.\n"
-					 "  " << filename << "(" << lineNo << "行目): " << line << "\n";
+				for (size_t i = 2; i < f.size(); ++i)
+				{
+					objIndices.push_back(f[0]);
+					objIndices.push_back(f[i - 1]);
+					objIndices.push_back(f[i]);
+				}
 			}
 			else
 			{
-				for (int i = 0; i < 3; ++i)
-				{
-					objIndices.push_back(f[i]);
-				}
+				std::cerr << "[警告]" << __func__ << ":面データの読み取りに失敗.\n"
+					 "  " << filename << "(" << lineNo << "行目): " << line << "\n";
 			}
 		}
 		else // 未対応
