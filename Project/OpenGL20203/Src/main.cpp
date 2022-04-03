@@ -206,7 +206,11 @@ int main()
 	// 戦車のパラメータ
 	Actor tank = { primitiveBuffer.Get(6), texTank, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) };
 	// T-34戦車のパラメータ
-	Actor tankT34 = {primitiveBuffer.Get(7), texTankT34, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) };
+	Actor tankT34 = { primitiveBuffer.Get(7), texTankT34, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) };
+	// 建物のパラメータ
+	Actor brickHouse = { primitiveBuffer.Get(8), texBrickHouse, glm::vec3(10.5f, 0, 0), glm::vec4(4), 0.0f, glm::vec3(-2.6f, 2.0f, 1.5f) };
+	// 課題用建物のパラメータ
+	Actor teraHouse = { primitiveBuffer.Get(9), texTeraHouse, glm::vec3(-13.0f, 0, -5.0f) , glm::vec4(0.03f), 0.0f, glm::vec3(0) };
 
 	//メインループ
 	double loopTime = glfwGetTime(); // 1/60秒間隔でループ処理するための時刻変数
@@ -309,31 +313,10 @@ int main()
 		Draw(tankT34, pipeline, matProj, matView);
 
 		//建物を表示
-		{
-			const glm::mat4 matModel = 
-				glm::translate(glm::mat4(1), glm::vec3(10.5f, 0, 0)) *
-				glm::scale(glm::mat4(1), glm::vec3(4, 4, 4)) * 
-				glm::translate(glm::mat4(1), glm::vec3(-2.6f, 2.0f, 1.5f));
-			const glm::mat4 matMVP = matProj * matView * matModel;
-			pipeline.SetUniform(locMatTRS, matMVP);
-			pipeline.SetUniform(locMatModel, matModel);
-
-			texBrickHouse->Bind(0);
-			primitiveBuffer.Get(8).Draw();
-		}
+		Draw(brickHouse, pipeline, matProj, matView);
 
 		//もう一つの建物を表示
-		{
-			const glm::mat4 matModel =
-				glm::translate(glm::mat4(1), glm::vec3(-13.0f, 0, -5.0f)) * 
-				glm::scale(glm::mat4(1), glm::vec3(0.03f, 0.03f, 0.03f));
-			const glm::mat4 matMVP = matProj * matView * matModel;
-			pipeline.SetUniform(locMatTRS, matMVP);
-			pipeline.SetUniform(locMatModel, matModel);
-
-			texTeraHouse->Bind(0);
-			primitiveBuffer.Get(9).Draw();
-		}
+		Draw(teraHouse, pipeline, matProj, matView);
 
 		// マップに配置する物体の表示データ
 		struct ObjectData
