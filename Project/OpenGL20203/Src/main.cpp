@@ -7,6 +7,7 @@
 #include "ProgramPipeline.h"
 #include "Texture.h"
 #include "Sampler.h"
+#include "Actor.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 #include <string>
@@ -196,14 +197,16 @@ int main()
 	std::shared_ptr<Texture> texTree(new Texture("Res/Tree.tga"));
 	std::shared_ptr<Texture> texWarehouse(new Texture("Res/WareHouse.tga"));
 	std::shared_ptr<Texture> texTank(new Texture("Res/PzVl_Tiger_I.tga"));
-	std::shared_ptr<Texture> texTank2(new Texture("Res/T-34.tga"));
+	std::shared_ptr<Texture> texTankT34(new Texture("Res/T-34.tga"));
 	std::shared_ptr<Texture> texBrickHouse(new Texture("Res/House38UVTexture.tga"));
 	std::shared_ptr<Texture> texTeraHouse(new Texture("Res/deneme_wire_143224087_BaseColor.tga"));
 
 	std::shared_ptr<Sampler> sampler(new Sampler(GL_REPEAT));
 
-	glm::vec3 posTank(0, 0, 0); //戦車の位置
-	float rotTank = 0; // 戦車の向き
+	// 戦車のパラメータ
+	Actor tank = { primitiveBuffer.Get(6), texTank, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) };
+	// T-34戦車のパラメータ
+	Actor tankT34 = {primitiveBuffer.Get(7), texTankT34, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) };
 
 	//メインループ
 	double loopTime = glfwGetTime(); // 1/60秒間隔でループ処理するための時刻変数
@@ -232,27 +235,27 @@ int main()
 			// 戦車を移動させる
 			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 			{
-				rotTank += glm::radians(90.0f) * deltaTime;
+				tank.rotation += glm::radians(90.0f) * deltaTime;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 			{
-				rotTank -= glm::radians(90.0f) * deltaTime;
+				tank.rotation -= glm::radians(90.0f) * deltaTime;
 			}
 
-			// rotTankが0のときの戦車の向きベクトル
+			// tank.rotationが0のときの戦車の向きベクトル
 			glm::vec3 tankFront(0, 0, 1);
 			// rotTankラジアンだけ回転させる回転行列を作る
-			const glm::mat4 matRot = glm::rotate(glm::mat4(1), rotTank, glm::vec3(0, 1, 0));
-			// 向きベクトルをrotTankだけ回転させる
+			const glm::mat4 matRot = glm::rotate(glm::mat4(1), tank.rotation, glm::vec3(0, 1, 0));
+			// 向きベクトルをtank.rotationだけ回転させる
 			tankFront = matRot * glm::vec4(tankFront, 1);
 
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			{
-				posTank += tankFront * 4.0f * deltaTime;
+				tank.position += tankFront * 4.0f * deltaTime;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 			{
-				posTank -= tankFront * 4.0f * deltaTime;
+				tank.position -= tankFront * 4.0f * deltaTime;
 			}
 		}
 
@@ -291,40 +294,19 @@ int main()
 		// ビュー行列を作成
 		const glm::mat4 matView = glm::lookAt(glm::vec3(0, 30, 20), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
-		// 行列をシェーダに転送する
-		const glm::mat4 matModel = glm::mat4(1);
-		const glm::mat4 matMVP = matProj * matView * matModel;
-		pipeline.SetUniform(locMatTRS, matMVP);
-		pipeline.SetUniform(locMatModel, matModel);
+		// 三角形を描画する
+		Actor triangle = { primitiveBuffer.Get(2), texTriangle, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0), };
+		Draw(triangle, pipeline, matProj, matView);
 
-		// 三角形と立方体の描画
-		texTriangle->Bind(0);
-		primitiveBuffer.Get(2).Draw();
-		primitiveBuffer.Get(3).Draw();
+		//立方体を描画する
+		Actor cube = { primitiveBuffer.Get(3), texTriangle, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0), };
+		Draw(cube, pipeline, matProj, matView);
 
 		//戦車を表示
-		{
-			const glm::mat4 matModel =
-				glm::translate(glm::mat4(1), posTank) *
-				glm::rotate(glm::mat4(1), rotTank, glm::vec3(0, 1, 0));
-			const glm::mat4 matMVP = matProj * matView * matModel;
-			pipeline.SetUniform(locMatTRS, matMVP);
-			pipeline.SetUniform(locMatModel, matModel);
+		Draw(tank, pipeline, matProj, matView);
 
-			texTank->Bind(0);
-			primitiveBuffer.Get(6).Draw();
-		}
-		
 		//戦車2を表示
-		{
-			const glm::mat4 matModel = glm::translate(glm::mat4(1), glm::vec3(-5, 0, 0));
-			const glm::mat4 matMVP = matProj * matView * matModel;
-			pipeline.SetUniform(locMatTRS, matMVP);
-			pipeline.SetUniform(locMatModel, matModel);
-
-			texTank2->Bind(0);
-			primitiveBuffer.Get(7).Draw();
-		}
+		Draw(tankT34, pipeline, matProj, matView);
 
 		//建物を表示
 		{
