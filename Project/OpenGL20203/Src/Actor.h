@@ -7,6 +7,8 @@
 #include "Primitive.h"
 #include "Texture.h"
 #include "ProgramPipeline.h"
+#include <string>
+#include <vector>
 #include <glm/glm.hpp>
 #include <memory>
 
@@ -15,6 +17,7 @@
 */
 struct Actor
 {
+	std::string name;// アクターの名前
 	Primitive prim;
 	std::shared_ptr<Texture> tex;
 	glm::vec3 position;
@@ -32,4 +35,5 @@ void Draw(
 	const glm::mat4& matProj,
 	const glm::mat4& matView);
 
+Actor* Find(std::vector<Actor>& actors, const char* name);
 #endif // ACTOR_H_INCLUDED

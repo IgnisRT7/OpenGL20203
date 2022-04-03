@@ -29,3 +29,27 @@ void Draw(
 	actor.tex->Bind(0);
 	actor.prim.Draw();
 }
+
+/**
+*	アクター配列から名前の一致するアクターを検索する
+*
+*	@param actors	検索対象の配列
+*	@param name		検索するアクターの名前
+*
+*	@retval nullptr以外	最初にnameと名前が一致したアクターのアドレス
+*	@retval nullptr		actorsの中に名前が一致するアクターがない
+*/
+Actor* Find(std::vector<Actor>& actors, const char* name)
+{
+	Actor* result = nullptr;
+	// actors配列からnameが一致する要素を見つけて返す
+	for (int i = 0; i < actors.size(); ++i)
+	{
+		if (actors[i].name == name)
+		{
+			result = &actors[i];
+			break;
+		}
+	}
+	return result;
+}

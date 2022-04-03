@@ -206,18 +206,54 @@ int main()
 
 	std::shared_ptr<Sampler> sampler(new Sampler(GL_REPEAT));
 
+			// マップに配置する物体の表示データ
+		struct ObjectData
+		{
+			const char* name;
+			Primitive prim; //表示するプリミティブ
+			const std::shared_ptr<Texture> tex; //プリミティブに貼るテクスチャ
+		};
+
+		//描画する物体のリスト
+		const ObjectData objectList[] =
+		{
+			{ "", Primitive(), 0}, // なし
+			{ "Tree", primitiveBuffer.Get(4), texTree}, // 木
+			{ "Warehouse", primitiveBuffer.Get(5), texWarehouse}, //家
+		};
+
+		//木を植える
+		for (int y = 0; y < 10; ++y)
+		{
+			for (int x = 0; x < 10; ++x)
+			{
+				// 描画する物体の番号を取得.
+				const int objectNo = objectMapData[y][x];
+				if (objectNo <= 0 || objectNo >= std::size(objectList))
+				{
+					continue;
+				}
+				const ObjectData p = objectList[objectNo];
+				
+				// 四角形が4x4mなので、xとyを4倍した位置に表示する.
+				const glm::vec3 position(x * 4 - 20, 0, y * 4 - 20);
+				
+				actors.push_back(Actor{ p.name, p.prim, p.tex, position, glm::vec3(1), 0.0f, glm::vec3(0)});
+			}
+		}
+
 	// 三角形のパラメータ
-	actors.push_back(Actor{ primitiveBuffer.Get(2), texTriangle, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0), });
+	actors.push_back(Actor{ "Triangle", primitiveBuffer.Get(2), texTriangle, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0), });
 	// 立方体のパラメータ
-	actors.push_back(Actor{ primitiveBuffer.Get(3), texTriangle, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0), });
+	actors.push_back(Actor{ "Cube", primitiveBuffer.Get(3), texTriangle, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0), });
 	// 戦車のパラメータ
-	actors.push_back(Actor{ primitiveBuffer.Get(6), texTank, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) });
+	actors.push_back(Actor{ "Tiger-I", primitiveBuffer.Get(6), texTank, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) });
 	// T-34戦車のパラメータ
-	actors.push_back(Actor{ primitiveBuffer.Get(7), texTankT34, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) });
+	actors.push_back(Actor{ "T-34", primitiveBuffer.Get(7), texTankT34, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) });
 	// 建物のパラメータ
-	actors.push_back(Actor{ primitiveBuffer.Get(8), texBrickHouse, glm::vec3(10.5f, 0, 0), glm::vec4(4), 0.0f, glm::vec3(-2.6f, 2.0f, 1.5f) });
+	actors.push_back(Actor{ "BrickHouse", primitiveBuffer.Get(8), texBrickHouse, glm::vec3(10.5f, 0, 0), glm::vec4(4), 0.0f, glm::vec3(-2.6f, 2.0f, 1.5f) });
 	// 課題用建物のパラメータ
-	actors.push_back(Actor{ primitiveBuffer.Get(9), texTeraHouse, glm::vec3(-13.0f, 0, -5.0f) , glm::vec4(0.03f), 0.0f, glm::vec3(0) });
+	actors.push_back(Actor{ "TeraHouse", primitiveBuffer.Get(9), texTeraHouse, glm::vec3(-13.0f, 0, -5.0f) , glm::vec4(0.03f), 0.0f, glm::vec3(0) });
 
 	//メインループ
 	double loopTime = glfwGetTime(); // 1/60秒間隔でループ処理するための時刻変数
@@ -244,29 +280,30 @@ int main()
 		for (; diffLoopTime >= deltaTime; diffLoopTime -= deltaTime)
 		{
 			// 戦車を移動させる
+			Actor* tank = Find(actors, "Tiger-I");
 			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 			{
-				actors[0].rotation += glm::radians(90.0f) * deltaTime;
+				tank->rotation += glm::radians(90.0f) * deltaTime;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 			{
-				actors[0].rotation -= glm::radians(90.0f) * deltaTime;
+				tank->rotation -= glm::radians(90.0f) * deltaTime;
 			}
 
 			// tank.rotationが0のときの戦車の向きベクトル
 			glm::vec3 tankFront(0, 0, 1);
 			// rotTankラジアンだけ回転させる回転行列を作る
-			const glm::mat4 matRot = glm::rotate(glm::mat4(1), actors[0].rotation, glm::vec3(0, 1, 0));
+			const glm::mat4 matRot = glm::rotate(glm::mat4(1), tank->rotation, glm::vec3(0, 1, 0));
 			// 向きベクトルをtank.rotationだけ回転させる
 			tankFront = matRot * glm::vec4(tankFront, 1);
 
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			{
-				actors[0].position += tankFront * 4.0f * deltaTime;
+				tank->position += tankFront * 4.0f * deltaTime;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 			{
-				actors[0].position -= tankFront * 4.0f * deltaTime;
+				tank->position -= tankFront * 4.0f * deltaTime;
 			}
 		}
 
@@ -311,47 +348,7 @@ int main()
 			Draw(actors[i], pipeline, matProj, matView);
 		}
 
-		// マップに配置する物体の表示データ
-		struct ObjectData
-		{
-			Primitive prim; //表示するプリミティブ
-			const std::shared_ptr<Texture> tex; //プリミティブに貼るテクスチャ
-		};
 
-		//描画する物体のリスト
-		const ObjectData objectList[] =
-		{
-			{ Primitive(), 0}, // なし
-			{ primitiveBuffer.Get(4), texTree}, // 木
-			{ primitiveBuffer.Get(5), texWarehouse}, //家
-		};
-
-		//木を植える
-		for (int y = 0; y < 10; ++y)
-		{
-			for (int x = 0; x < 10; ++x)
-			{
-				// 描画する物体の番号を取得.
-				const int objectNo = objectMapData[y][x];
-				if (objectNo <= 0 || objectNo >= std::size(objectList))
-				{
-					continue;
-				}
-				const ObjectData p = objectList[objectNo];
-				
-				// 四角形が4x4mなので、xとyを4倍した位置に表示する.
-				const glm::vec3 position(x * 4 - 20, 0, y * 4 - 20);
-				
-				// 行列をシェーダに転送する 
-				const glm::mat4 matModel = glm::translate(glm::mat4(1), position);
-				const glm::mat4 matMVP = matProj * matView * matModel;
-				pipeline.SetUniform(locMatTRS, matMVP);
-				pipeline.SetUniform(locMatModel, matModel);
-				
-				p.tex->Bind(0);
-				p.prim.Draw();
-			}
-		}
 
 		//マップを(-20-20)-(20,20)の範囲に描画
 		const std::shared_ptr<Texture> mapTexList[] = { texGreen, texGround, texRoad };
