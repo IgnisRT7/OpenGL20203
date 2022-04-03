@@ -206,41 +206,68 @@ int main()
 
 	std::shared_ptr<Sampler> sampler(new Sampler(GL_REPEAT));
 
-			// マップに配置する物体の表示データ
-		struct ObjectData
-		{
-			const char* name;
-			Primitive prim; //表示するプリミティブ
-			const std::shared_ptr<Texture> tex; //プリミティブに貼るテクスチャ
-		};
+	// マップに配置する物体の表示データ
+	struct ObjectData
+	{
+		const char* name;
+		Primitive prim; //表示するプリミティブ
+		const std::shared_ptr<Texture> tex; //プリミティブに貼るテクスチャ
+	};
 
-		//描画する物体のリスト
-		const ObjectData objectList[] =
-		{
-			{ "", Primitive(), 0}, // なし
-			{ "Tree", primitiveBuffer.Get(4), texTree}, // 木
-			{ "Warehouse", primitiveBuffer.Get(5), texWarehouse}, //家
-		};
+	//描画する物体のリスト
+	const ObjectData objectList[] =
+	{
+		{ "", Primitive(), 0}, // なし
+		{ "Tree", primitiveBuffer.Get(4), texTree}, // 木
+		{ "Warehouse", primitiveBuffer.Get(5), texWarehouse}, //家
+	};
 
-		//木を植える
-		for (int y = 0; y < 10; ++y)
+	//木を植える
+	for (int y = 0; y < 10; ++y)
+	{
+		for (int x = 0; x < 10; ++x)
 		{
-			for (int x = 0; x < 10; ++x)
+			// 描画する物体の番号を取得.
+			const int objectNo = objectMapData[y][x];
+			if (objectNo <= 0 || objectNo >= std::size(objectList))
 			{
-				// 描画する物体の番号を取得.
-				const int objectNo = objectMapData[y][x];
-				if (objectNo <= 0 || objectNo >= std::size(objectList))
-				{
-					continue;
-				}
-				const ObjectData p = objectList[objectNo];
-				
-				// 四角形が4x4mなので、xとyを4倍した位置に表示する.
-				const glm::vec3 position(x * 4 - 20, 0, y * 4 - 20);
-				
-				actors.push_back(Actor{ p.name, p.prim, p.tex, position, glm::vec3(1), 0.0f, glm::vec3(0)});
+				continue;
 			}
+			const ObjectData p = objectList[objectNo];
+				
+			// 四角形が4x4mなので、xとyを4倍した位置に表示する.
+			const glm::vec3 position(x * 4 - 20, 0, y * 4 - 20);
+				
+			actors.push_back(Actor{ p.name, p.prim, p.tex, position, glm::vec3(1), 0.0f, glm::vec3(0)});
 		}
+	}
+
+	//マップを(-20-20)-(20,20)の範囲に描画
+	struct MapData
+	{
+		const char* name;
+		Primitive prim;
+		const std::shared_ptr<Texture> tex;
+	};
+	MapData mapDataList[] =
+	{
+		{ "Green", primitiveBuffer.Get(0), texGreen },
+		{ "Ground", primitiveBuffer.Get(0), texGround },
+		{ "Road", primitiveBuffer.Get(0), texRoad },
+	};
+
+	for (int y = 0; y < 10; ++y)
+	{
+		for (int x = 0; x < 10; ++x)
+		{
+			//四角形が4x4mなので、xとyを4倍した位置に表示する
+			const glm::vec3 position(x * 4 - 20, 0, y * 4 - 20);
+			const int textureNo = mapData[y][x];
+			const MapData p = mapDataList[textureNo];
+
+			actors.push_back(Actor{ p.name, p.prim, p.tex, position, glm::vec3(1), 0.0f, glm::vec3(0)});
+		}
+	}
 
 	// 三角形のパラメータ
 	actors.push_back(Actor{ "Triangle", primitiveBuffer.Get(2), texTriangle, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0), });
@@ -346,29 +373,6 @@ int main()
 		for (int i = 0; i < actors.size(); ++i)
 		{
 			Draw(actors[i], pipeline, matProj, matView);
-		}
-
-
-
-		//マップを(-20-20)-(20,20)の範囲に描画
-		const std::shared_ptr<Texture> mapTexList[] = { texGreen, texGround, texRoad };
-		for (int y = 0; y < 10; ++y)
-		{
-			for (int x = 0; x < 10; ++x)
-			{
-				//四角形が4x4mなので、xとyを4倍した位置に表示する
-				const glm::vec3 position(x *4 - 20, 0, y * 4 - 20);
-
-				//行列をシェーダに転送する
-				const glm::mat4 matModel = glm::translate(glm::mat4(1), position);
-				const glm::mat4 matMVP = matProj * matView * matModel;
-				pipeline.SetUniform(locMatTRS, matMVP);
-				pipeline.SetUniform(locMatModel, matModel);
-
-				const int textureNo = mapData[y][x];
-				mapTexList[textureNo]->Bind(0);
-				primitiveBuffer.Get(0).Draw();
-			}
 		}
 
 		// テクスチャの割り当てを解除
