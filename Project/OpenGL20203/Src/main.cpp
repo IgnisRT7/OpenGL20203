@@ -44,6 +44,9 @@ int objectMapData[10][10] =
 	{ 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
 };
 
+// アクターの配列
+std::vector<Actor> actors;
+
 /**
 *	OpenGLからのメッセージを処理する
 *
@@ -203,14 +206,18 @@ int main()
 
 	std::shared_ptr<Sampler> sampler(new Sampler(GL_REPEAT));
 
+	// 三角形のパラメータ
+	actors.push_back(Actor{ primitiveBuffer.Get(2), texTriangle, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0), });
+	// 立方体のパラメータ
+	actors.push_back(Actor{ primitiveBuffer.Get(3), texTriangle, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0), });
 	// 戦車のパラメータ
-	Actor tank = { primitiveBuffer.Get(6), texTank, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) };
+	actors.push_back(Actor{ primitiveBuffer.Get(6), texTank, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) });
 	// T-34戦車のパラメータ
-	Actor tankT34 = { primitiveBuffer.Get(7), texTankT34, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) };
+	actors.push_back(Actor{ primitiveBuffer.Get(7), texTankT34, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) });
 	// 建物のパラメータ
-	Actor brickHouse = { primitiveBuffer.Get(8), texBrickHouse, glm::vec3(10.5f, 0, 0), glm::vec4(4), 0.0f, glm::vec3(-2.6f, 2.0f, 1.5f) };
+	actors.push_back(Actor{ primitiveBuffer.Get(8), texBrickHouse, glm::vec3(10.5f, 0, 0), glm::vec4(4), 0.0f, glm::vec3(-2.6f, 2.0f, 1.5f) });
 	// 課題用建物のパラメータ
-	Actor teraHouse = { primitiveBuffer.Get(9), texTeraHouse, glm::vec3(-13.0f, 0, -5.0f) , glm::vec4(0.03f), 0.0f, glm::vec3(0) };
+	actors.push_back(Actor{ primitiveBuffer.Get(9), texTeraHouse, glm::vec3(-13.0f, 0, -5.0f) , glm::vec4(0.03f), 0.0f, glm::vec3(0) });
 
 	//メインループ
 	double loopTime = glfwGetTime(); // 1/60秒間隔でループ処理するための時刻変数
@@ -239,27 +246,27 @@ int main()
 			// 戦車を移動させる
 			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 			{
-				tank.rotation += glm::radians(90.0f) * deltaTime;
+				actors[0].rotation += glm::radians(90.0f) * deltaTime;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 			{
-				tank.rotation -= glm::radians(90.0f) * deltaTime;
+				actors[0].rotation -= glm::radians(90.0f) * deltaTime;
 			}
 
 			// tank.rotationが0のときの戦車の向きベクトル
 			glm::vec3 tankFront(0, 0, 1);
 			// rotTankラジアンだけ回転させる回転行列を作る
-			const glm::mat4 matRot = glm::rotate(glm::mat4(1), tank.rotation, glm::vec3(0, 1, 0));
+			const glm::mat4 matRot = glm::rotate(glm::mat4(1), actors[0].rotation, glm::vec3(0, 1, 0));
 			// 向きベクトルをtank.rotationだけ回転させる
 			tankFront = matRot * glm::vec4(tankFront, 1);
 
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			{
-				tank.position += tankFront * 4.0f * deltaTime;
+				actors[0].position += tankFront * 4.0f * deltaTime;
 			}
 			else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 			{
-				tank.position -= tankFront * 4.0f * deltaTime;
+				actors[0].position -= tankFront * 4.0f * deltaTime;
 			}
 		}
 
@@ -298,25 +305,11 @@ int main()
 		// ビュー行列を作成
 		const glm::mat4 matView = glm::lookAt(glm::vec3(0, 30, 20), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
-		// 三角形を描画する
-		Actor triangle = { primitiveBuffer.Get(2), texTriangle, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0), };
-		Draw(triangle, pipeline, matProj, matView);
-
-		//立方体を描画する
-		Actor cube = { primitiveBuffer.Get(3), texTriangle, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0), };
-		Draw(cube, pipeline, matProj, matView);
-
-		//戦車を表示
-		Draw(tank, pipeline, matProj, matView);
-
-		//戦車2を表示
-		Draw(tankT34, pipeline, matProj, matView);
-
-		//建物を表示
-		Draw(brickHouse, pipeline, matProj, matView);
-
-		//もう一つの建物を表示
-		Draw(teraHouse, pipeline, matProj, matView);
+		// アクターを描画する
+		for (int i = 0; i < actors.size(); ++i)
+		{
+			Draw(actors[i], pipeline, matProj, matView);
+		}
 
 		// マップに配置する物体の表示データ
 		struct ObjectData
