@@ -177,6 +177,7 @@ int main()
 	primitiveBuffer.AddFromObjeFile("Res/T34.obj");
 	primitiveBuffer.AddFromObjeFile("Res/HouseRender.obj");
 	primitiveBuffer.AddFromObjeFile("Res/deneme.obj");
+	primitiveBuffer.AddFromObjeFile("Res/Bullet.obj");
 
 	//パイプラインオブジェクトを作成する
 	ProgramPipeline pipeline("Res/FragmentLighting.vert", "Res/FragmentLighting.frag");
@@ -203,6 +204,7 @@ int main()
 	std::shared_ptr<Texture> texTankT34(new Texture("Res/T-34.tga"));
 	std::shared_ptr<Texture> texBrickHouse(new Texture("Res/House38UVTexture.tga"));
 	std::shared_ptr<Texture> texTeraHouse(new Texture("Res/deneme_wire_143224087_BaseColor.tga"));
+	std::shared_ptr<Texture> texBullet(new Texture("Res/Bullet.tga"));
 
 	std::shared_ptr<Sampler> sampler(new Sampler(GL_REPEAT));
 
@@ -332,7 +334,47 @@ int main()
 			{
 				tank->position -= tankFront * 4.0f * deltaTime;
 			}
+
+			// マウス左ボタンの状態を取得する
+			int shotButton = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+
+			// マウス左ボタンが押されていたら弾アクターを追加する
+			if (shotButton == GLFW_PRESS)
+			{
+				Actor bullet = { "Bullet", primitiveBuffer.Get(10), texBullet, tank->position, glm::vec3(1), tank->rotation, glm::vec3(0)};
+
+				// 1.5秒後に弾を消す
+				bullet.lifespan = 1.5f;
+
+				// 戦車の向いている方向に、30m/sの速度で移動させる
+				bullet.velocity = tankFront * 30.0f;
+
+				actors.push_back(bullet);
+			}
 		}
+
+		// アクターの状態を更新する
+		for (int i = 0; i < actors.size(); ++i)
+		{
+			// アクターの寿命を減らす
+			if (actors[i].lifespan > 0)
+			{
+				actors[i].lifespan -= deltaTime;
+
+				// 寿命の尽きたアクターを『削除待ち』状態にする
+				if (actors[i].lifespan <= 0)
+				{
+					actors[i].isDead = true;
+					continue; // 削除待ちアクターは更新をスキップ
+				}
+			}
+
+			// アクターの位置を更新する
+			actors[i].position += actors[i].velocity * deltaTime;
+		}
+
+		// 削除待ちのアクターを削除する
+		actors.erase(std::remove_if(actors.begin(), actors.end(), [](Actor& a){ return a.isDead; }), actors.end());
 
 		//
 		// ゲーム状態を描画する

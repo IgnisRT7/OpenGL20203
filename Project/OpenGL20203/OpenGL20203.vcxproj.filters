@@ -124,10 +124,13 @@
     <Image Include="Res\T-34.tga">
       <Filter>リソース ファイル\Images</Filter>
     </Image>
-    <Image Include="Res\House38UVTexture.tga">
-      <Filter>リソース ファイル\Shader</Filter>
-    </Image>
     <Image Include="Res\deneme_wire_143224087_BaseColor.tga">
+      <Filter>リソース ファイル\Images</Filter>
+    </Image>
+    <Image Include="Res\House38UVTexture.tga">
+      <Filter>リソース ファイル\Images</Filter>
+    </Image>
+    <Image Include="Res\Bullet.tga">
       <Filter>リソース ファイル\Images</Filter>
     </Image>
   </ItemGroup>
@@ -160,6 +163,9 @@
       <Filter>リソース ファイル\Objects</Filter>
     </Text>
     <Text Include="Res\deneme.obj">
+      <Filter>リソース ファイル\Objects</Filter>
+    </Text>
+    <Text Include="Res\Bullet.obj">
       <Filter>リソース ファイル\Objects</Filter>
     </Text>
   </ItemGroup>
