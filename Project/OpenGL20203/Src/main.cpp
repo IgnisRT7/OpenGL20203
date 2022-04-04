@@ -346,7 +346,7 @@ int main()
 				glm::vec3 position = tank->position + tankFront * 6.0f;
 				position.y += 2.0f;
 
-				Actor bullet = { "Bullet", primitiveBuffer.Get(10), texBullet, position, glm::vec3(1), tank->rotation, glm::vec3(0)};
+				Actor bullet = { "Bullet", primitiveBuffer.Get(10), texBullet, position, glm::vec3(0.25f), tank->rotation, glm::vec3(0)};
 
 				// 1.5•bŒã‚É’e‚ğÁ‚·
 				bullet.lifespan = 1.5f;
