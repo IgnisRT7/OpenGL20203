@@ -288,6 +288,7 @@ int main()
 	double loopTime = glfwGetTime(); // 1/60秒間隔でループ処理するための時刻変数
 	double diffLoopTime = 0; // 自国の差分
 	const float deltaTime = 1.0f / 60.0f; // 更新間隔
+	int oldShotButton = 0; // 前回のショットボタンの状態
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -338,10 +339,14 @@ int main()
 			// マウス左ボタンの状態を取得する
 			int shotButton = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 
-			// マウス左ボタンが押されていたら弾アクターを追加する
-			if (shotButton == GLFW_PRESS)
+			// マウス左ボタンが押された瞬間に弾アクターを追加する
+			if (shotButton == GLFW_PRESS && oldShotButton != GLFW_PRESS)
 			{
-				Actor bullet = { "Bullet", primitiveBuffer.Get(10), texBullet, tank->position, glm::vec3(1), tank->rotation, glm::vec3(0)};
+				//発射位置を方の先端に設定
+				glm::vec3 position = tank->position + tankFront * 6.0f;
+				position.y += 2.0f;
+
+				Actor bullet = { "Bullet", primitiveBuffer.Get(10), texBullet, position, glm::vec3(1), tank->rotation, glm::vec3(0)};
 
 				// 1.5秒後に弾を消す
 				bullet.lifespan = 1.5f;
@@ -351,6 +356,9 @@ int main()
 
 				actors.push_back(bullet);
 			}
+
+			// 『前回のショットボタンの状態』を更新する
+			oldShotButton = shotButton;
 		}
 
 		// アクターの状態を更新する
