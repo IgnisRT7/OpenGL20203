@@ -279,6 +279,8 @@ int main()
 	actors.push_back(Actor{ "Tiger-I", primitiveBuffer.Get(6), texTank, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) });
 	// T-34戦車のパラメータ
 	actors.push_back(Actor{ "T-34", primitiveBuffer.Get(7), texTankT34, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) });
+	// T-34戦車に衝突判定を付ける
+	actors.back().collider = Box{glm::vec3(-1.5f, 0, -1.5f), glm::vec3(1.5f, 2.5f, 1.5f)};
 	// 建物のパラメータ
 	actors.push_back(Actor{ "BrickHouse", primitiveBuffer.Get(8), texBrickHouse, glm::vec3(10.5f, 0, 0), glm::vec4(4), 0.0f, glm::vec3(-2.6f, 2.0f, 1.5f) });
 	// 課題用建物のパラメータ
@@ -354,6 +356,9 @@ int main()
 				// 戦車の向いている方向に、30m/sの速度で移動させる
 				bullet.velocity = tankFront * 30.0f;
 
+				// たまに衝突判定を付ける
+				bullet.collider = Box {glm::vec3(-0.25f), glm::vec3(0.25f)};
+
 				actors.push_back(bullet);
 			}
 
@@ -379,6 +384,33 @@ int main()
 
 			// アクターの位置を更新する
 			actors[i].position += actors[i].velocity * deltaTime;
+		}
+
+		// アクターの衝突判定を行う
+		for (int a = 0; a < actors.size(); a++)
+		{
+			for (int b = a + 1; b < actors.size(); b++)
+			{
+				// 削除待ちアクターは衝突しない
+				if (actors[a].isDead)
+				{
+					break;
+				}
+				else if (actors[b].isDead)
+				{
+					continue;
+				}
+
+				if (DetectCollision(actors[a], actors[b]))
+				{
+					// T-34戦車と弾の衝突を処理する
+					if (actors[a].name == "T-34" && actors[b].name == "Bullet")
+					{
+						actors[a].isDead = true; // T-34戦車を消去する
+						actors[b].isDead = true; // 弾を消去する
+					}
+				}
+			}
 		}
 
 		// 削除待ちのアクターを削除する

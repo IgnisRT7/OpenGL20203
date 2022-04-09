@@ -13,6 +13,15 @@
 #include <memory>
 
 /**
+*	’¼•û‘Ì
+*/
+struct Box
+{
+	glm::vec3 min = glm::vec3(0);
+	glm::vec3 max = glm::vec3(0);
+};
+
+/**
 *	•¨‘Ì‚ğ§Œä‚·‚éƒpƒ‰ƒ[ƒ^
 */
 struct Actor
@@ -28,6 +37,8 @@ struct Actor
 	glm::vec3 velocity = glm::vec3(0);
 	float lifespan = 0;
 	bool isDead = false;
+
+	Box collider; // Õ“Ë”»’è
 };
 
 /**
@@ -40,4 +51,6 @@ void Draw(
 	const glm::mat4& matView);
 
 Actor* Find(std::vector<Actor>& actors, const char* name);
+bool DetectCollision(Actor& actorA, Actor& actorB);
+
 #endif // ACTOR_H_INCLUDED

@@ -53,3 +53,59 @@ Actor* Find(std::vector<Actor>& actors, const char* name)
 	}
 	return result;
 }
+
+/**
+*	衝突を検出する	
+*
+*	@param actorA	衝突しているか調べるアクター
+*	@param actorB	衝突しているか調べるアクター	
+*
+*	@retval true	衝突している
+*	@retval false	衝突していない
+*/
+bool DetectCollision(Actor& actorA, Actor& actorB)
+{
+	// ワールド座標系のコライダーを計算する
+	Box a = actorA.collider;
+	a.min += actorA.position;
+	a.max += actorA.position;
+
+	Box b = actorB.collider;
+	b.min += actorB.position;
+	b.max += actorB.position;
+
+	// aの左側面がbの右側面より右にあるなら、衝突していない
+	if (a.min.x >= b.max.x)
+	{
+		return false;
+	}
+	// aの右側面がbの左側面より左にあるなら、衝突していない
+	if (a.max.x <= b.min.x)
+	{
+		return false;
+	}
+	
+	// aの下面がbの上面より上にあるなら、衝突していない
+	if (a.min.y >= b.max.y)
+	{
+		return false;
+	}
+	// aの上面がbの下面より下にあるなら、衝突していない
+	if (a.max.y <= b.min.y)
+	{
+		return false;
+	}
+	
+	// aの奥側面がbの手前側面より手前にあるなら、衝突していない
+	if (a.min.z >= b.max.z)
+	{
+		return false;
+	}
+	// aの手前側面がbの奥側面より奥にあるなら、衝突していない
+	if (a.max.z <= b.min.z)
+	{
+		return false;
+	}
+	
+	return true;
+}
