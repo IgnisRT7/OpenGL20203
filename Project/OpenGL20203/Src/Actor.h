@@ -37,6 +37,7 @@ struct Actor
 	glm::vec3 velocity = glm::vec3(0);
 	float lifespan = 0;
 	bool isDead = false;
+	float health = 10; //‘Ï‹vŒŒ
 
 	Box collider; // Õ“Ë”»’è
 };

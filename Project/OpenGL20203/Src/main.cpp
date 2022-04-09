@@ -406,7 +406,13 @@ int main()
 					// T-34íÔ‚Æ’e‚ÌÕ“Ë‚ğˆ—‚·‚é
 					if (actors[a].name == "T-34" && actors[b].name == "Bullet")
 					{
-						actors[a].isDead = true; // T-34íÔ‚ğÁ‹‚·‚é
+						// T-34íÔ‚Ì‘Ï‹v’l‚ğŒ¸‚ç‚·
+						actors[a].health -= 1;
+						// ‘Ï‹v‚ª0‚ÉˆÈ‰º‚É‚È‚Á‚½‚çT-34íÔ‚ğÁ‹‚·‚é
+						if (actors[a].health <= 0)
+						{
+							actors[a].isDead = true; // T-34íÔ‚ğÁ‹‚·‚é
+						}
 						actors[b].isDead = true; // ’e‚ğÁ‹‚·‚é
 					}
 				}
