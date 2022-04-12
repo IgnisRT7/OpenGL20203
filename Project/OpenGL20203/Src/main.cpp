@@ -277,10 +277,13 @@ int main()
 	actors.push_back(Actor{ "Cube", primitiveBuffer.Get(3), texTriangle, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0), });
 	// 戦車のパラメータ
 	actors.push_back(Actor{ "Tiger-I", primitiveBuffer.Get(6), texTank, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) });
-	// T-34戦車のパラメータ
-	actors.push_back(Actor{ "T-34", primitiveBuffer.Get(7), texTankT34, glm::vec3(0), glm::vec3(1), 0.0f, glm::vec3(0) });
-	// T-34戦車に衝突判定を付ける
-	actors.back().collider = Box{glm::vec3(-1.5f, 0, -1.5f), glm::vec3(1.5f, 2.5f, 1.5f)};
+	for(int i = 0; i < 3; i++)
+	{
+		// T-34戦車のパラメータ
+		actors.push_back(Actor{ "T-34", primitiveBuffer.Get(7), texTankT34, glm::vec3(i * 5, 0,0), glm::vec3(1), 0.0f, glm::vec3(0) });
+		// T-34戦車に衝突判定を付ける
+		actors.back().collider = Box{glm::vec3(-1.5f, 0, -1.5f), glm::vec3(1.5f, 2.5f, 1.5f)};
+	}
 	// 建物のパラメータ
 	actors.push_back(Actor{ "BrickHouse", primitiveBuffer.Get(8), texBrickHouse, glm::vec3(10.5f, 0, 0), glm::vec4(4), 0.0f, glm::vec3(-2.6f, 2.0f, 1.5f) });
 	// 課題用建物のパラメータ
